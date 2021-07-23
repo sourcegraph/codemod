@@ -1,0 +1,118 @@
+@import './RepositoriesPopover';
+
+// Woah!
+.kek {
+    color: red;
+
+    // nah
+    &--wow {
+        color: blue;
+    }
+}
+
+// Let's see how you handle global top-level classes!
+.theme-redesign .kek {
+    color: red;
+}
+
+// .repo-header {
+.repo-header {
+    flex: none;
+    padding: 0;
+    align-items: stretch;
+    border-color: var(--border-color);
+    border-style: solid;
+
+    // &--alert {
+    &--alert {
+        border-width: 1px 0;
+    }
+
+    // &__action-list-item {
+    &__action-list-item {
+        // Have a small gap between buttons so they are visually distinct when pressed
+        // stylelint-disable-next-line declaration-property-unit-whitelist
+        margin-left: 1px;
+
+        // &__kek-pek {
+        &__kek-pek {
+            color: red;
+        }
+
+        // &:hover {
+        &:hover {
+            // background: var(--color-bg-1);
+            background: var(--color-bg-1);
+
+            // .theme-redesign & {
+            .theme-redesign & {
+                background: inherit;
+            }
+        }
+    }
+
+    // &__file-action {
+    &__file-action {
+        display: block;
+        text-align: left;
+
+        // span {
+        span {
+            color: var(--body-color);
+            margin-left: 0.5rem;
+        }
+    }
+
+    // &__action {
+    &__action {
+        margin: 0.5rem 0.625rem 0.5rem 0;
+        padding: 0.25rem;
+
+        .theme-redesign & {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+
+    // .navbar-nav {
+    .navbar-nav {
+        white-space: nowrap;
+
+        .nav-item {
+            display: flex;
+            align-items: stretch;
+
+            // .nav-link {
+            .nav-link {
+                user-select: none;
+            }
+        }
+    }
+
+    &__alert {
+        margin: 0 0.25rem;
+        padding: 0.125rem 0.25rem;
+        cursor: default;
+        user-select: none;
+    }
+
+    // &__icon-chevron {
+    &__icon-chevron {
+        opacity: 0.6;
+        margin: auto;
+    }
+
+    .copy-link-action {
+        opacity: 0;
+    }
+    &:hover,
+    &:focus-within {
+        .copy-link-action {
+            opacity: 1;
+        }
+    }
+
+    &__spacer {
+        flex: 1 1 0;
+    }
+}
