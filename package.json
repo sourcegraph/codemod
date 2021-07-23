@@ -1,0 +1,49 @@
+{
+  "name": "@sourcegraph/codemod",
+  "description": "A collection of codemods powered by TS-Morph and PostCSS",
+  "version": "0.0.0-DEVELOPMENT",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sourcegraph/codemod.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/cli.js",
+  "types": "dist/cli.d.ts",
+  "scripts": {
+    "test": "jest",
+    "semantic-release": "semantic-release",
+    "prettier": "prettier '**/*.{js?(on),ts?(x),scss,md,yml}' --write --list-different",
+    "prettier-check": "npm run prettier -- --write=false",
+    "eslint": "eslint './src/**/*.ts?(x)'",
+    "build": "tsc -p .",
+    "watch": "tsc -p . -w"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
+    "@sourcegraph/eslint-config": "^0.25.1",
+    "@sourcegraph/prettierrc": "^3.0.3",
+    "@sourcegraph/tsconfig": "^4.0.1",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^16.4.1",
+    "eslint": "^7.31.0",
+    "husky": "^7.0.1",
+    "jest": "^27.0.6",
+    "prettier": "^2.3.2",
+    "semantic-release": "^17.4.4",
+    "typescript": "^4.3.5"
+  }
+}
