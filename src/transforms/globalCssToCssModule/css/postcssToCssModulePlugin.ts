@@ -1,6 +1,7 @@
 import { AcceptedPlugin, Rule, ChildNode } from 'postcss'
 import parser, { isRoot, Selector } from 'postcss-selector-parser'
 
+// Classes that will be wrapped into a :global() keyword.
 const GLOBAL_TOP_LEVEL_CLASSES = ['.theme-redesign', '.theme-light', '.theme-dark']
 
 // Based on the implementation of the `postcss-nested` plugin:
