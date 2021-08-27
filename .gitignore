@@ -1,2 +1,26 @@
+# Vim
+*.swp
+
+# JetBrains/IntelliJ
+.idea
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+.\#*
+.dir-locals.el
+
+# Mac OS X
+.DS_Store
+
+# Sublime
+*.sublime-project
+*.sublime-workspace
+
 dist
 node_modules
+npm-debug.log
+yarn-error.log
+.eslintcache
