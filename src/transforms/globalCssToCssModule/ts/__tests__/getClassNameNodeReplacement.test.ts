@@ -5,6 +5,8 @@ import { getClassNameNodeReplacement, GetClassNameNodeReplacementOptions } from 
 import { getNodesWithClassName } from '../getNodesWithClassName'
 
 describe('getClassNameNodeReplacement', () => {
+    const leftOverClassName = 'hey test'
+
     const getParentFromFirstClassNameNode = (fileSource: string) => {
         const [nodeWithClassName] = getNodesWithClassName(createSourceFile(fileSource))
 
@@ -15,11 +17,9 @@ describe('getClassNameNodeReplacement', () => {
         ts.factory.createPropertyAccessExpression(ts.factory.createIdentifier('styles'), exportName)
     )
 
-    const leftOverClassName = 'hey test'
-
     const testCases = [
         {
-            fileSource: '<div className="kek" />',
+            fileSource: '<div className="whatever" />',
             parentKind: 'JSXAttribute',
             replacement: {
                 kind: SyntaxKind.JsxExpression,
@@ -29,7 +29,7 @@ describe('getClassNameNodeReplacement', () => {
             },
         },
         {
-            fileSource: '<div className={classNames({ kek: isActive })} />',
+            fileSource: '<div className={classNames({ whatever: isActive })} />',
             parentKind: 'PropertyAssignment',
             replacement: {
                 kind: SyntaxKind.ComputedPropertyName,
@@ -39,7 +39,7 @@ describe('getClassNameNodeReplacement', () => {
             },
         },
         {
-            fileSource: '<div className={isActive ? "kek" : "pek"} />',
+            fileSource: '<div className={isActive ? "whatever" : "flex"} />',
             parentKind: 'CallExpression',
             replacement: {
                 kind: SyntaxKind.CallExpression,
