@@ -5,13 +5,33 @@ import { splitClassName } from './splitClassName'
 
 export const STYLES_IDENTIFIER = 'styles'
 
-interface ProcessStringLiteralsOptions {
+interface ProcessNodesWithClassNameOptions {
     nodesWithClassName: (Identifier | StringLiteral)[]
     exportNameMap: Record<string, string>
 }
 
-// Walk through all the `className` nodes and replace relevant classes with matching CSS module export names.
-export function processNodesWithClassName(options: ProcessStringLiteralsOptions): void {
+/**
+ * Walk through all the `className` nodes and replace relevant classes with matching CSS module export names.
+ *
+ * Example:
+ *
+ * exportNameMap: { kek: "kek", kek--wow: "kekWow" }
+ * nodesWithClassName: [
+ *   <div className="kek kek--wow d-flex" />,
+ *   <div className={isActive ? 'kek' : 'd-flex'} />,
+ *   <div className="d-flex m-1" />,
+ * ]
+ *
+ * Nodes with matches between `exportNameMap` and `className` prop will be replaced with new nodes:
+ *
+ * <div className="kek kek--wow d-flex" /> -> <div className={classNames("d-flex", styles.kek styles.kekWow)} />
+ * <div className={isActive ? 'kek' : 'd-flex'} /> -> <div className={isActive ? styles.kek : 'd-flex'} />
+ *
+ * Nodes without matching `exportNameMap` classes will be skipped without changes.
+ *
+ * <div className="d-flex m-1" /> -> left without changes
+ */
+export function processNodesWithClassName(options: ProcessNodesWithClassNameOptions): void {
     const { nodesWithClassName, exportNameMap } = options
 
     for (const nodeWithClassName of nodesWithClassName) {
