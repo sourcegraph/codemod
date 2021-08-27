@@ -3,8 +3,8 @@ import path from 'path'
 
 import { Project } from 'ts-morph'
 
-import { getCssModuleExportNameMap } from './css/getCssModuleExportNameMap'
-import { transformFileToCssModule } from './css/transformFileToCssModule'
+import { getCssModuleExportNameMap } from './postcss/getCssModuleExportNameMap'
+import { transformFileToCssModule } from './postcss/transformFileToCssModule'
 import { addClassNamesUtilImportIfNeeded } from './ts/classNamesUtility'
 import { getNodesWithClassName } from './ts/getNodesWithClassName'
 import { STYLES_IDENTIFIER, processNodesWithClassName } from './ts/processNodesWithClassName'
