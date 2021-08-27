@@ -15,17 +15,23 @@ interface ProcessNodesWithClassNameOptions {
  *
  * Example:
  *
- * exportNameMap: { kek: "kek", kek--wow: "kekWow" }
- * nodesWithClassName: [
- *   <div className="kek kek--wow d-flex" />,
- *   <div className={isActive ? 'kek' : 'd-flex'} />,
- *   <div className="d-flex m-1" />,
- * ]
+ * ```ts
+ * processNodesWithClassName({
+ *   exportNameMap: { kek: "kek", kek--wow: "kekWow" }
+ *   nodesWithClassName: [
+ *     <div className="kek kek--wow d-flex" />,
+ *     <div className={isActive ? 'kek' : 'd-flex'} />,
+ *     <div className="d-flex m-1" />,
+ *   ]
+ * })
+ * ```
  *
  * Nodes with matches between `exportNameMap` and `className` prop will be replaced with new nodes:
  *
- * <div className="kek kek--wow d-flex" /> -> <div className={classNames("d-flex", styles.kek styles.kekWow)} />
- * <div className={isActive ? 'kek' : 'd-flex'} /> -> <div className={isActive ? styles.kek : 'd-flex'} />
+ * ```tsx
+ *   <div className="kek kek--wow d-flex" /> -> <div className={classNames("d-flex", styles.kek styles.kekWow)} />
+ *   <div className={isActive ? 'kek' : 'd-flex'} /> -> <div className={isActive ? styles.kek : 'd-flex'} />
+ * ```
  *
  * Nodes without matching `exportNameMap` classes will be skipped without changes.
  *
