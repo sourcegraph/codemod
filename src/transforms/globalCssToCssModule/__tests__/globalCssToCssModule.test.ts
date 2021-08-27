@@ -6,7 +6,6 @@ import { globalCssToCssModule } from '../globalCssToCssModule'
 
 const TARGET_FILE = path.resolve(__dirname, './fixtures/Kek.tsx')
 
-// TODO: split into granular atomic tests.
 describe('globalCssToCssModule', () => {
     it('transforms correctly', async () => {
         const project = new Project()
