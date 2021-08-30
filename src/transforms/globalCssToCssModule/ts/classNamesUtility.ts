@@ -1,8 +1,8 @@
 import { ts, SourceFile, SyntaxKind } from 'ts-morph'
 import { Expression } from 'typescript'
 
-const CLASSNAMES_IDENTIFIER = 'classNames'
-const CLASSNAMES_MODULE_SPECIFIER = CLASSNAMES_IDENTIFIER.toLowerCase()
+export const CLASSNAMES_IDENTIFIER = 'classNames'
+export const CLASSNAMES_MODULE_SPECIFIER = CLASSNAMES_IDENTIFIER.toLowerCase()
 
 // Wraps array of arguments into a `classNames` function call.
 export function wrapIntoClassNamesUtility(classNames: Expression[]): ts.CallExpression {
