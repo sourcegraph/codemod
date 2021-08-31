@@ -1,5 +1,7 @@
 # Global CSS to CSS Module codemod
 
+Status: WIP
+
 ## Usage
 
 ```sh
