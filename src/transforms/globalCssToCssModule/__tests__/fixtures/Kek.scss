@@ -11,7 +11,7 @@
 }
 
 // Let's see how you handle global top-level classes!
-.theme-redesign .kek {
+.theme-light .kek {
     color: red;
 }
 
@@ -44,8 +44,8 @@
             // background: var(--color-bg-1);
             background: var(--color-bg-1);
 
-            // .theme-redesign & {
-            .theme-redesign & {
+            // .theme-light & {
+            .theme-light & {
                 background: inherit;
             }
         }
@@ -68,7 +68,7 @@
         margin: 0.5rem 0.625rem 0.5rem 0;
         padding: 0.25rem;
 
-        .theme-redesign & {
+        .theme-light & {
             margin-top: 0;
             margin-bottom: 0;
         }

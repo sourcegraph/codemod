@@ -3,8 +3,6 @@ import path from 'path'
 import { createCssProcessor } from './createCssProcessor'
 import { postcssToCssModulePlugin } from './postcssToCssModulePlugin'
 
-const transformFileToCssModuleProcessor = createCssProcessor(postcssToCssModulePlugin())
-
 interface TransformFileToCssModuleResult {
     css: string
     filePath: string
@@ -14,6 +12,7 @@ export async function transformFileToCssModule(
     sourceCss: string,
     sourceFilePath: string
 ): Promise<TransformFileToCssModuleResult> {
+    const transformFileToCssModuleProcessor = createCssProcessor(postcssToCssModulePlugin())
     const transformedResult = await transformFileToCssModuleProcessor(sourceCss)
 
     const { dir, name } = path.parse(sourceFilePath)

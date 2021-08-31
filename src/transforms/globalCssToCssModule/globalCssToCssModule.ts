@@ -3,8 +3,8 @@ import path from 'path'
 
 import { Project } from 'ts-morph'
 
-import { getCssModuleExportNameMap } from './css/getCssModuleExportNameMap'
-import { transformFileToCssModule } from './css/transformFileToCssModule'
+import { getCssModuleExportNameMap } from './postcss/getCssModuleExportNameMap'
+import { transformFileToCssModule } from './postcss/transformFileToCssModule'
 import { addClassNamesUtilImportIfNeeded } from './ts/classNamesUtility'
 import { getNodesWithClassName } from './ts/getNodesWithClassName'
 import { STYLES_IDENTIFIER, processNodesWithClassName } from './ts/processNodesWithClassName'
@@ -41,11 +41,11 @@ export function globalCssToCssModule(project: Project): Promise<CodemodResult[]>
 
         // TODO: add check if SCSS file doesn't exist and exit if it's not found.
         const sourceCss = readFileSync(cssFilePath, 'utf8')
-        const exportNameMap = await getCssModuleExportNameMap(sourceCss)
         const { css: cssModuleSource, filePath: cssModuleFileName } = await transformFileToCssModule(
             sourceCss,
             cssFilePath
         )
+        const exportNameMap = await getCssModuleExportNameMap(cssModuleSource)
 
         processNodesWithClassName({
             exportNameMap,

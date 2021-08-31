@@ -14,7 +14,7 @@ exports[`globalCssToCssModule transforms correctly 1`] = `
 }
 
 /* Let's see how you handle global top-level classes!*/
-:global(.theme-redesign) .kek {
+:global(.theme-light) .kek {
     color: red;
 }
 
@@ -77,7 +77,7 @@ exports[`globalCssToCssModule transforms correctly 1`] = `
         margin: 0.5rem 0.625rem 0.5rem 0;
         padding: 0.25rem;
 
-        :global(.theme-redesign) & {
+        :global(.theme-light) & {
             margin-top: 0;
             margin-bottom: 0;
         }
@@ -106,8 +106,8 @@ exports[`globalCssToCssModule transforms correctly 1`] = `
             /* background: var(--color-bg-1);*/
             background: var(--color-bg-1);
 
-            /* .theme-redesign & {*/
-            :global(.theme-redesign) & {
+            /* .theme-light & {*/
+            :global(.theme-light) & {
                 background: inherit;
             }
         }
