@@ -25,7 +25,7 @@ interface CodemodResult {
         source: string
         path: string
     }
-    writePromise?: Promise<void[]>
+    fsWritePromise?: Promise<void[]>
 }
 
 /**
@@ -106,7 +106,7 @@ export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions)
          * 3. Delete redundant SCSS file that's replaced with CSS module.
          */
         if (shouldWriteFiles) {
-            result.writePromise = Promise.all([
+            result.fsWritePromise = Promise.all([
                 tsSourceFile.save(),
                 fsPromises.writeFile(cssModuleFileName, cssModuleSource, { encoding: 'utf-8' }),
                 fsPromises.rm(cssFilePath),
@@ -119,7 +119,7 @@ export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions)
     const codemodResults = await Promise.all(codemodResultPromises)
 
     if (shouldWriteFiles) {
-        await Promise.all(codemodResults.map(result => result.writePromise))
+        await Promise.all(codemodResults.map(result => result.fsWritePromise))
     }
 
     return codemodResults
