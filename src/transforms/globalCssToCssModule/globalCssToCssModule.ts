@@ -13,6 +13,7 @@ import { STYLES_IDENTIFIER, processNodesWithClassName } from './ts/processNodesW
 
 interface GlobalCssToCssModuleOptions {
     project: Project
+    /** If `true` persist changes made by the codemod to the filesystem. */
     shouldWriteFiles?: boolean
 }
 
@@ -87,7 +88,23 @@ export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions)
             moduleSpecifier: `./${path.parse(cssModuleFileName).base}`,
         })
 
-        const result: CodemodResult = {
+        /**
+         * If `shouldWriteFiles` is true:
+         *
+         * 1. Update TS file with a new source that uses CSS module.
+         * 2. Create a new CSS module file.
+         * 3. Delete redundant SCSS file that's replaced with CSS module.
+         */
+        const fsWritePromise = shouldWriteFiles
+            ? Promise.all([
+                  tsSourceFile.save(),
+                  fsPromises.writeFile(cssModuleFileName, cssModuleSource, { encoding: 'utf-8' }),
+                  fsPromises.rm(cssFilePath),
+              ])
+            : undefined
+
+        return {
+            fsWritePromise,
             css: {
                 source: cssModuleSource,
                 path: path.resolve(parsedTsFilePath.dir, cssModuleFileName),
@@ -97,23 +114,6 @@ export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions)
                 path: tsSourceFile.getFilePath(),
             },
         }
-
-        /**
-         * If `shouldWriteFiles` is true:
-         *
-         * 1. Update TS file with a new source that uses CSS module.
-         * 2. Create a new CSS module file.
-         * 3. Delete redundant SCSS file that's replaced with CSS module.
-         */
-        if (shouldWriteFiles) {
-            result.fsWritePromise = Promise.all([
-                tsSourceFile.save(),
-                fsPromises.writeFile(cssModuleFileName, cssModuleSource, { encoding: 'utf-8' }),
-                fsPromises.rm(cssFilePath),
-            ])
-        }
-
-        return result
     })
 
     const codemodResults = await Promise.all(codemodResultPromises)
