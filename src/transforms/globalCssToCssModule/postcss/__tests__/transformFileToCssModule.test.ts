@@ -2,7 +2,6 @@ import { transformFileToCssModule } from '../transformFileToCssModule'
 
 const replaceWhitespace = (value: string) => value.replace(/\s+/g, ' ').trim()
 
-// TODO add case by case tests
 describe('transformFileToCssModule', () => {
     it('correctly transforms provided CSS to CSS module', async () => {
         const cssSource = `
