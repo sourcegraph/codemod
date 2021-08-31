@@ -41,11 +41,11 @@ export function globalCssToCssModule(project: Project): Promise<CodemodResult[]>
 
         // TODO: add check if SCSS file doesn't exist and exit if it's not found.
         const sourceCss = readFileSync(cssFilePath, 'utf8')
-        const exportNameMap = await getCssModuleExportNameMap(sourceCss)
         const { css: cssModuleSource, filePath: cssModuleFileName } = await transformFileToCssModule(
             sourceCss,
             cssFilePath
         )
+        const exportNameMap = await getCssModuleExportNameMap(cssModuleSource)
 
         processNodesWithClassName({
             exportNameMap,
