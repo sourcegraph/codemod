@@ -65,7 +65,7 @@ export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions)
         })
         .filter(isDefined)
 
-    const codemodResults = itemsToProcess.map(async ({ tsSourceFile, cssFilePath }) => {
+    const codemodResultPromises = itemsToProcess.map(async ({ tsSourceFile, cssFilePath }) => {
         const tsFilePath = tsSourceFile.getFilePath()
         const parsedTsFilePath = path.parse(tsFilePath)
 
@@ -87,7 +87,6 @@ export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions)
             moduleSpecifier: `./${path.parse(cssModuleFileName).base}`,
         })
 
-        // TODO: run prettier and eslint --fix over updated files.
         const result: CodemodResult = {
             css: {
                 source: cssModuleSource,
@@ -99,21 +98,29 @@ export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions)
             },
         }
 
+        /**
+         * If `shouldWriteFiles` is true:
+         *
+         * 1. Update TS file with a new source that uses CSS module.
+         * 2. Create a new CSS module file.
+         * 3. Delete redundant SCSS file that's replaced with CSS module.
+         */
         if (shouldWriteFiles) {
             result.writePromise = Promise.all([
                 tsSourceFile.save(),
                 fsPromises.writeFile(cssModuleFileName, cssModuleSource, { encoding: 'utf-8' }),
+                fsPromises.rm(cssFilePath),
             ])
         }
 
         return result
     })
 
-    const results = await Promise.all(codemodResults)
+    const codemodResults = await Promise.all(codemodResultPromises)
 
     if (shouldWriteFiles) {
-        await Promise.all(results.map(result => result.writePromise))
+        await Promise.all(codemodResults.map(result => result.writePromise))
     }
 
-    return results
+    return codemodResults
 }

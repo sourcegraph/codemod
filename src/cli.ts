@@ -4,7 +4,6 @@ import { Project } from 'ts-morph'
 
 import { globalCssToCssModule } from './transforms/globalCssToCssModule/globalCssToCssModule'
 
-// TODO: add interactive CLI support
 const TARGET_FILE = path.resolve(__dirname, './transforms/globalCssToCssModule/__tests__/fixtures/Kek.tsx')
 
 async function main(): Promise<void> {
