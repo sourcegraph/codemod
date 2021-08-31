@@ -4,7 +4,7 @@ const replaceWhitespace = (value: string) => value.replace(/\s+/g, ' ').trim()
 
 describe('transformFileToCssModule', () => {
     it('correctly transforms provided CSS to CSS module', async () => {
-        const cssSource = `
+        const sourceCss = `
             // .repo-header comment
             .repo-header {
                 flex: none;
@@ -72,7 +72,7 @@ describe('transformFileToCssModule', () => {
                 }
         `
 
-        const { css, filePath } = await transformFileToCssModule(cssSource, 'whatever.scss')
+        const { css, filePath } = await transformFileToCssModule({ sourceCss, sourceFilePath: 'whatever.scss' })
 
         expect(replaceWhitespace(css)).toEqual(replaceWhitespace(expectedCssModuleSource))
         expect(filePath).toEqual('whatever.module.scss')

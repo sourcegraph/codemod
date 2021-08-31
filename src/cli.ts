@@ -11,7 +11,7 @@ async function main(): Promise<void> {
     const project = new Project()
     project.addSourceFilesAtPaths(TARGET_FILE)
 
-    const result = await globalCssToCssModule(project)
+    const result = await globalCssToCssModule({ project, shouldWriteFiles: true })
     console.log(result)
 }
 

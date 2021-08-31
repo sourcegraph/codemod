@@ -1,13 +1,20 @@
-import { readFileSync } from 'fs'
+import { existsSync, readFileSync, promises as fsPromises } from 'fs'
 import path from 'path'
 
 import { Project } from 'ts-morph'
+
+import { isDefined } from '../../utils'
 
 import { getCssModuleExportNameMap } from './postcss/getCssModuleExportNameMap'
 import { transformFileToCssModule } from './postcss/transformFileToCssModule'
 import { addClassNamesUtilImportIfNeeded } from './ts/classNamesUtility'
 import { getNodesWithClassName } from './ts/getNodesWithClassName'
 import { STYLES_IDENTIFIER, processNodesWithClassName } from './ts/processNodesWithClassName'
+
+interface GlobalCssToCssModuleOptions {
+    project: Project
+    shouldWriteFiles?: boolean
+}
 
 interface CodemodResult {
     css: {
@@ -18,6 +25,7 @@ interface CodemodResult {
         source: string
         path: string
     }
+    writePromise?: Promise<void[]>
 }
 
 /**
@@ -32,44 +40,80 @@ interface CodemodResult {
  * 7) Add `.module.scss` import to the `.tsx` file.
  *
  */
-export function globalCssToCssModule(project: Project): Promise<CodemodResult[]> {
-    const codemodResults = project.getSourceFiles().map(async sourceFile => {
-        const filePath = sourceFile.getFilePath()
+export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions): Promise<CodemodResult[]> {
+    const { project, shouldWriteFiles } = options
+    /**
+     * Find `.tsx` files with co-located `.scss` file.
+     * For example `RepoHeader.tsx` should have matching `RepoHeader.scss` in the same folder.
+     */
+    const itemsToProcess = project
+        .getSourceFiles()
+        .map(tsSourceFile => {
+            const tsFilePath = tsSourceFile.getFilePath()
 
-        const parsedTsFilePath = path.parse(filePath)
-        const cssFilePath = path.resolve(parsedTsFilePath.dir, `${parsedTsFilePath.name}.scss`)
+            const parsedTsFilePath = path.parse(tsFilePath)
+            const cssFilePath = path.resolve(parsedTsFilePath.dir, `${parsedTsFilePath.name}.scss`)
 
-        // TODO: add check if SCSS file doesn't exist and exit if it's not found.
+            if (existsSync(cssFilePath)) {
+                return {
+                    tsSourceFile,
+                    cssFilePath,
+                }
+            }
+
+            return undefined
+        })
+        .filter(isDefined)
+
+    const codemodResults = itemsToProcess.map(async ({ tsSourceFile, cssFilePath }) => {
+        const tsFilePath = tsSourceFile.getFilePath()
+        const parsedTsFilePath = path.parse(tsFilePath)
+
         const sourceCss = readFileSync(cssFilePath, 'utf8')
-        const { css: cssModuleSource, filePath: cssModuleFileName } = await transformFileToCssModule(
+        const { css: cssModuleSource, filePath: cssModuleFileName } = await transformFileToCssModule({
             sourceCss,
-            cssFilePath
-        )
+            sourceFilePath: cssFilePath,
+        })
         const exportNameMap = await getCssModuleExportNameMap(cssModuleSource)
 
         processNodesWithClassName({
             exportNameMap,
-            nodesWithClassName: getNodesWithClassName(sourceFile),
+            nodesWithClassName: getNodesWithClassName(tsSourceFile),
         })
 
-        addClassNamesUtilImportIfNeeded(sourceFile)
-        sourceFile.addImportDeclaration({
+        addClassNamesUtilImportIfNeeded(tsSourceFile)
+        tsSourceFile.addImportDeclaration({
             defaultImport: STYLES_IDENTIFIER,
             moduleSpecifier: `./${path.parse(cssModuleFileName).base}`,
         })
 
         // TODO: run prettier and eslint --fix over updated files.
-        return {
+        const result: CodemodResult = {
             css: {
                 source: cssModuleSource,
                 path: path.resolve(parsedTsFilePath.dir, cssModuleFileName),
             },
             ts: {
-                source: sourceFile.getFullText(),
-                path: sourceFile.getFilePath(),
+                source: tsSourceFile.getFullText(),
+                path: tsSourceFile.getFilePath(),
             },
         }
+
+        if (shouldWriteFiles) {
+            result.writePromise = Promise.all([
+                tsSourceFile.save(),
+                fsPromises.writeFile(cssModuleFileName, cssModuleSource, { encoding: 'utf-8' }),
+            ])
+        }
+
+        return result
     })
 
-    return Promise.all(codemodResults)
+    const results = await Promise.all(codemodResults)
+
+    if (shouldWriteFiles) {
+        await Promise.all(results.map(result => result.writePromise))
+    }
+
+    return results
 }
