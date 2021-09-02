@@ -7,6 +7,7 @@ export async function formatWithStylelint(sourceCode: string, filePath: string):
         fix: true,
         configOverrides: {
             rules: {
+                // Hard-coded for now. Make it optional or delete it once it's not needed.
                 indentation: 4,
             },
         },
