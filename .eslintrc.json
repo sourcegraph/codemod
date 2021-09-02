@@ -3,6 +3,11 @@
   "parserOptions": {
     "project": "tsconfig.json"
   },
+  "settings": {
+    "react": {
+      "version": "*"
+    }
+  },
   "rules": {
     "no-sync": "off"
   }
