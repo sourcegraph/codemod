@@ -11,5 +11,5 @@ echo "Hello world"
 ## TODO
 
 - [x] Run code formatters on the updated files
-- [] Handle @import statements in SCSS
-- [] Add interactive CLI support
+- [x] Handle @import statements in SCSS
+- [ ] Add interactive CLI support

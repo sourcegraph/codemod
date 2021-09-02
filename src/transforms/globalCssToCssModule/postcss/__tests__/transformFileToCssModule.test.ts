@@ -5,6 +5,8 @@ const replaceWhitespace = (value: string) => value.replace(/\s+/g, ' ').trim()
 describe('transformFileToCssModule', () => {
     it('correctly transforms provided CSS to CSS module', async () => {
         const sourceCss = `
+            @import './RepositoriesPopover';
+
             // .repo-header comment
             .repo-header {
                 flex: none;
@@ -29,6 +31,10 @@ describe('transformFileToCssModule', () => {
                 .navbar-nav {
                     white-space: nowrap;
                 }
+
+                @media (--xs-breakpoint-down) {
+                    border-radius: var(--border-radius);
+                }
             }
 
             .theme-light {
@@ -39,6 +45,8 @@ describe('transformFileToCssModule', () => {
         `
 
         const expectedCssModuleSource = `
+                @import 'wildcard/src/global-styles/breakpoints';
+
                 /* .repo-header comment*/
                 .repo-header {
                     flex: none;
@@ -57,6 +65,10 @@ describe('transformFileToCssModule', () => {
 
                     :global(.navbar-nav) {
                         white-space: nowrap;
+                    }
+
+                    @media (--xs-breakpoint-down) {
+                        border-radius: var(--border-radius);
                     }
                 }
 
