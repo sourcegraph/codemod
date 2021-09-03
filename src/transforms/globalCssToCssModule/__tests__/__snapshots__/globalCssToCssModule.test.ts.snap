@@ -116,6 +116,9 @@ exports[`globalCssToCssModule transforms correctly 1`] = `
 .kek-pek {
     color: red;
 }
+.logo {
+    display: flex;
+}
 "
 `;
 
@@ -136,7 +139,7 @@ export const Kek = () => {
                     [classNames('d-flex mr-1', styles.kek)]: isActive,
                 })}
              />
-            It's a component<p className={styles.kekWow}>wow</p>
+            It's a component<p className={styles.logo}>wow</p>
             <div className={classNames('m-2 d-flex m-1', styles.repoHeader)}>Another one!</div>
         </div>
     )
