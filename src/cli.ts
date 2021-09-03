@@ -1,19 +1,43 @@
 import path from 'path'
 
+import { Command, Option } from 'commander'
+import signale from 'signale'
 import { Project } from 'ts-morph'
 
-import { globalCssToCssModule } from './transforms/globalCssToCssModule/globalCssToCssModule'
+import { transforms, transformNames } from './transforms'
 
-const TARGET_FILE = path.resolve(__dirname, './transforms/globalCssToCssModule/__tests__/fixtures/Kek.tsx')
+const program = new Command()
 
-async function main(): Promise<void> {
-    const project = new Project()
-    project.addSourceFilesAtPaths(TARGET_FILE)
-
-    const result = await globalCssToCssModule({ project, shouldWriteFiles: true })
-    console.log(result)
+interface CodemodCliOptions {
+    write: boolean
+    format: boolean
+    transform: keyof typeof transforms
 }
 
-main().catch(error => {
-    throw error
-})
+program
+    .addOption(
+        new Option('-t, --transform <transform>', 'Transform name').choices(transformNames).makeOptionMandatory()
+    )
+    .option('-w, --write [write]', 'Persist codemod changes to the filesystem', false)
+    .argument('<fileGlob>', 'File glob or globs to change files based on')
+    .action(async (fileGlob: string, options: CodemodCliOptions) => {
+        const { write: shouldWriteFiles, transform } = options
+        const projectGlob = path.isAbsolute(fileGlob) ? fileGlob : path.join(process.cwd(), fileGlob)
+
+        signale.start(`Starting codemod "${transform}" with project glob "${projectGlob}"`)
+
+        const project = new Project()
+        project.addSourceFilesAtPaths(projectGlob)
+
+        const result = await transforms[transform]({ project, shouldWriteFiles })
+
+        if (result) {
+            if (!shouldWriteFiles) {
+                console.log(result)
+            }
+
+            signale.success('Files are transformed!')
+        }
+    })
+
+program.parse(process.argv)

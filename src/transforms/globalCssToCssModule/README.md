@@ -5,11 +5,5 @@ Status: WIP
 ## Usage
 
 ```sh
-echo "Hello world"
+yarn transform -t globalCssToCssModule /client/web/src/search/home/SearchPage.tsx --write
 ```
-
-## TODO
-
-- [x] Run code formatters on the updated files
-- [x] Handle @import statements in SCSS
-- [ ] Add interactive CLI support

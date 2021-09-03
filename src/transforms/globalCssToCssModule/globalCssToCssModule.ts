@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, promises as fsPromises } from 'fs'
 import path from 'path'
 
+import signale from 'signale'
 import { Project } from 'ts-morph'
 
 import { formatWithPrettierEslint, formatWithStylelint, isDefined } from '../../utils'
@@ -41,7 +42,7 @@ interface CodemodResult {
  * 7) Add `.module.scss` import to the `.tsx` file.
  *
  */
-export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions): Promise<CodemodResult[]> {
+export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions): Promise<CodemodResult[] | false> {
     const { project, shouldWriteFiles } = options
     /**
      * Find `.tsx` files with co-located `.scss` file.
@@ -66,9 +67,17 @@ export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions)
         })
         .filter(isDefined)
 
+    if (itemsToProcess.length === 0) {
+        signale.warn('No files to process!')
+
+        return false
+    }
+
     const codemodResultPromises = itemsToProcess.map(async ({ tsSourceFile, cssFilePath }) => {
         const tsFilePath = tsSourceFile.getFilePath()
         const parsedTsFilePath = path.parse(tsFilePath)
+
+        signale.info(`Processing file "${tsFilePath}"`)
 
         const sourceCss = readFileSync(cssFilePath, 'utf8')
         const exportNameMap = await getCssModuleExportNameMap(sourceCss)
@@ -122,6 +131,7 @@ export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions)
     const codemodResults = await Promise.all(codemodResultPromises)
 
     if (shouldWriteFiles) {
+        signale.info('Persisting codemod changes to the filesystem...')
         await Promise.all(codemodResults.map(result => result.fsWritePromise))
     }
 
