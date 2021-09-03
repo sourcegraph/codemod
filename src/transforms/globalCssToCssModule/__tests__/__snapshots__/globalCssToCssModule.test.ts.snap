@@ -1,8 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`globalCssToCssModule transforms correctly 1`] = `
-"@import './RepositoriesPopover';
-
+"
 /* Woah! */
 .kek {
     color: red;
