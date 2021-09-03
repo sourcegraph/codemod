@@ -10,6 +10,6 @@ echo "Hello world"
 
 ## TODO
 
-[] Handle @import statements in SCSS
-[] Run code formatters on the updated files
-[] Add interactive CLI support
+- [x] Run code formatters on the updated files
+- [] Handle @import statements in SCSS
+- [] Add interactive CLI support

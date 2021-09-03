@@ -13,6 +13,7 @@
     "baseUrl": "./src",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "typeRoots": ["./src/types", "./node_modules/@types"],
   },
   "include": ["./src/**/*"],
   "exclude": ["./**/fixtures"],

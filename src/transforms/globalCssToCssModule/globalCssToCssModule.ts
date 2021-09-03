@@ -3,7 +3,7 @@ import path from 'path'
 
 import { Project } from 'ts-morph'
 
-import { isDefined } from '../../utils'
+import { formatWithPrettierEslint, formatWithStylelint, isDefined } from '../../utils'
 
 import { getCssModuleExportNameMap } from './postcss/getCssModuleExportNameMap'
 import { transformFileToCssModule } from './postcss/transformFileToCssModule'
@@ -71,11 +71,11 @@ export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions)
         const parsedTsFilePath = path.parse(tsFilePath)
 
         const sourceCss = readFileSync(cssFilePath, 'utf8')
+        const exportNameMap = await getCssModuleExportNameMap(sourceCss)
         const { css: cssModuleSource, filePath: cssModuleFileName } = await transformFileToCssModule({
             sourceCss,
             sourceFilePath: cssFilePath,
         })
-        const exportNameMap = await getCssModuleExportNameMap(cssModuleSource)
 
         processNodesWithClassName({
             exportNameMap,
@@ -88,6 +88,9 @@ export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions)
             moduleSpecifier: `./${path.parse(cssModuleFileName).base}`,
         })
 
+        formatWithPrettierEslint(tsSourceFile)
+        const formattedCssModuleSource = await formatWithStylelint(cssModuleSource, cssFilePath)
+
         /**
          * If `shouldWriteFiles` is true:
          *
@@ -98,7 +101,7 @@ export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions)
         const fsWritePromise = shouldWriteFiles
             ? Promise.all([
                   tsSourceFile.save(),
-                  fsPromises.writeFile(cssModuleFileName, cssModuleSource, { encoding: 'utf-8' }),
+                  fsPromises.writeFile(cssModuleFileName, formattedCssModuleSource, { encoding: 'utf-8' }),
                   fsPromises.rm(cssFilePath),
               ])
             : undefined
@@ -106,7 +109,7 @@ export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions)
         return {
             fsWritePromise,
             css: {
-                source: cssModuleSource,
+                source: formattedCssModuleSource,
                 path: path.resolve(parsedTsFilePath.dir, cssModuleFileName),
             },
             ts: {

@@ -14,5 +14,5 @@ describe('globalCssToCssModule', () => {
 
         expect(transformResult.css.source).toMatchSnapshot()
         expect(transformResult.ts.source).toMatchSnapshot()
-    })
+    }, 15000) // Timeout of 15s (default is 5s). `prettier-eslint` format is slow 😬.
 })
