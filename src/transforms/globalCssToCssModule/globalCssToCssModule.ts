@@ -5,10 +5,10 @@ import signale from 'signale'
 import { Project } from 'ts-morph'
 
 import { formatWithPrettierEslint, formatWithStylelint, isDefined } from '../../utils'
+import { addClassNamesUtilImportIfNeeded } from '../../utils/classNamesUtility'
 
 import { getCssModuleExportNameMap } from './postcss/getCssModuleExportNameMap'
 import { transformFileToCssModule } from './postcss/transformFileToCssModule'
-import { addClassNamesUtilImportIfNeeded } from './ts/classNamesUtility'
 import { getNodesWithClassName } from './ts/getNodesWithClassName'
 import { STYLES_IDENTIFIER, processNodesWithClassName } from './ts/processNodesWithClassName'
 
