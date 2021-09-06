@@ -128,12 +128,5 @@ export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions)
         }
     })
 
-    const codemodResults = await Promise.all(codemodResultPromises)
-
-    if (shouldWriteFiles) {
-        signale.info('Persisting codemod changes to the filesystem...')
-        await Promise.all(codemodResults.map(result => result.fsWritePromise))
-    }
-
-    return codemodResults
+    return Promise.all(codemodResultPromises)
 }
