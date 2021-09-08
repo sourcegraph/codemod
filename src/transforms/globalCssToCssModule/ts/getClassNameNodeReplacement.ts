@@ -42,6 +42,7 @@ export function getClassNameNodeReplacement(
     options: GetClassNameNodeReplacementOptions
 ): PropertyAccessExpression | JsxExpression | ComputedPropertyName | CallExpression {
     const { parentNode, exportNameReferences } = options
+    const parentKind = parentNode.getKind()
 
     if (exportNameReferences.length === 0) {
         throw new Error('`exportNameReferences` should not be empty!')
@@ -49,19 +50,19 @@ export function getClassNameNodeReplacement(
 
     const replacementWithoutBraces = getClassNameNodeReplacementWithoutBraces(options)
 
-    if (parentNode.getKind() === SyntaxKind.JsxAttribute) {
+    if (parentKind === SyntaxKind.JsxAttribute) {
         return ts.factory.createJsxExpression(undefined, replacementWithoutBraces)
     }
 
-    if (parentNode.getKind() === SyntaxKind.PropertyAssignment) {
+    if (parentKind === SyntaxKind.PropertyAssignment) {
         return ts.factory.createComputedPropertyName(replacementWithoutBraces)
     }
 
-    if (parentNode.getKind() === SyntaxKind.ConditionalExpression) {
+    if (parentKind === SyntaxKind.ConditionalExpression || parentKind === SyntaxKind.CallExpression) {
         // Replace one class string inside of `ConditionalExpression` with the `exportName`.
         // className={classNames('d-flex', isActive ? 'kek' : 'pek')} -> className={classNames('d-flex', isActive ? styles.kek : 'pek')}
         return replacementWithoutBraces
     }
 
-    throw new Error(`Unsupported 'parentNode' type: ${parentNode.compilerNode.kind}`)
+    throw new Error(`Unsupported 'parentNode' type: ${parentNode.getKindName()}`)
 }

@@ -11,7 +11,7 @@ export const Kek = () => {
                     'd-flex mr-1 kek': isActive,
                 })}
             ></div>
-            It's a component<p className="kek--wow">wow</p>
+            It's a component<p className="repo-header__logo">wow</p>
             <div className="m-2 repo-header d-flex m-1">Another one!</div>
         </div>
     )
