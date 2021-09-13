@@ -29,11 +29,15 @@ program
         const project = new Project()
         project.addSourceFilesAtPaths(projectGlob)
 
-        const result = await transforms[transform]({ project, shouldWriteFiles })
+        const results = await transforms[transform]({ project, shouldWriteFiles })
 
-        if (result) {
-            if (!shouldWriteFiles) {
-                console.log(result)
+        if (results) {
+            if (shouldWriteFiles) {
+                signale.info('Persisting codemod changes to the filesystem...')
+                await Promise.all(results.map(result => result.fsWritePromise))
+                signale.info('Persisting codemod changes completed')
+            } else {
+                console.log(results)
             }
 
             signale.success('Files are transformed!')

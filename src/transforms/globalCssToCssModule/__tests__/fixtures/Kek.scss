@@ -28,6 +28,10 @@
         border-width: 1px 0;
     }
 
+    &__logo {
+        display: flex;
+    }
+
     // &__action-list-item {
     &__action-list-item {
         // Have a small gap between buttons so they are visually distinct when pressed

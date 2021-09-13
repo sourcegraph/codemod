@@ -1,33 +1,18 @@
 import signale from 'signale'
-import { Project, SyntaxKind } from 'ts-morph'
+import { SyntaxKind } from 'ts-morph'
 
+import { CodemodResult, CodemodOptions } from '../../types'
 import { formatWithPrettierEslint } from '../../utils'
 import { addClassNamesUtilImportIfNeeded } from '../../utils/classNamesUtility'
 
 import { getTemplateExpressionReplacement } from './getTemplateExpressionReplacement'
-
-interface ClassNameTemplateToClassnamesCallOptions {
-    project: Project
-    /** If `true` persist changes made by the codemod to the filesystem. */
-    shouldWriteFiles?: boolean
-}
-
-interface CodemodResult {
-    ts: {
-        source: string
-        path: string
-    }
-    fsWritePromise?: Promise<void>
-}
 
 /**
  * Convert template strings usage in `className` props to `classNames()` utility call
  *
  * className={`repo-header ${className}`} -> className={classNames('repo-header', className)}
  */
-export async function classNameTemplateToClassnamesCall(
-    options: ClassNameTemplateToClassnamesCallOptions
-): Promise<CodemodResult[] | false> {
+export async function classNameTemplateToClassnamesCall(options: CodemodOptions): CodemodResult {
     const { project, shouldWriteFiles } = options
 
     const codemodResultPromises = project.getSourceFiles().map(tsSourceFile => {
@@ -58,16 +43,9 @@ export async function classNameTemplateToClassnamesCall(
                 source: tsSourceFile.getFullText(),
                 path: tsSourceFile.getFilePath(),
             },
-            fsWritePromise: shouldWriteFiles ? tsSourceFile.save() : undefined,
+            fsWritePromise: shouldWriteFiles ? Promise.all([tsSourceFile.save()]) : undefined,
         }
     })
 
-    const codemodResults = await Promise.all(codemodResultPromises)
-
-    if (shouldWriteFiles) {
-        signale.info('Persisting codemod changes to the filesystem...')
-        await Promise.all(codemodResults.map(result => result.fsWritePromise))
-    }
-
-    return codemodResults
+    return Promise.all(codemodResultPromises)
 }
