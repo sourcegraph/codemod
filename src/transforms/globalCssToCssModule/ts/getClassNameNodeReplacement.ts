@@ -8,7 +8,7 @@ import {
     PropertyAccessExpression,
 } from 'typescript'
 
-import { wrapIntoClassNamesUtility } from './classNamesUtility'
+import { wrapIntoClassNamesUtility } from '../../../utils/classNamesUtility'
 
 export interface GetClassNameNodeReplacementOptions {
     parentNode: NodeParentType<StringLiteral>

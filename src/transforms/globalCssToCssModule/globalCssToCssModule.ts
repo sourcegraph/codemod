@@ -2,33 +2,15 @@ import { existsSync, readFileSync, promises as fsPromises } from 'fs'
 import path from 'path'
 
 import signale from 'signale'
-import { Project } from 'ts-morph'
 
+import { CodemodResult, CodemodOptions } from '../../types'
 import { formatWithPrettierEslint, formatWithStylelint, isDefined } from '../../utils'
+import { addClassNamesUtilImportIfNeeded } from '../../utils/classNamesUtility'
 
 import { getCssModuleExportNameMap } from './postcss/getCssModuleExportNameMap'
 import { transformFileToCssModule } from './postcss/transformFileToCssModule'
-import { addClassNamesUtilImportIfNeeded } from './ts/classNamesUtility'
 import { getNodesWithClassName } from './ts/getNodesWithClassName'
 import { STYLES_IDENTIFIER, processNodesWithClassName } from './ts/processNodesWithClassName'
-
-interface GlobalCssToCssModuleOptions {
-    project: Project
-    /** If `true` persist changes made by the codemod to the filesystem. */
-    shouldWriteFiles?: boolean
-}
-
-interface CodemodResult {
-    css: {
-        source: string
-        path: string
-    }
-    ts: {
-        source: string
-        path: string
-    }
-    fsWritePromise?: Promise<void[]>
-}
 
 /**
  * Convert globally scoped stylesheet tied to the React component into a CSS Module.
@@ -42,7 +24,7 @@ interface CodemodResult {
  * 7) Add `.module.scss` import to the `.tsx` file.
  *
  */
-export async function globalCssToCssModule(options: GlobalCssToCssModuleOptions): Promise<CodemodResult[] | false> {
+export async function globalCssToCssModule(options: CodemodOptions): CodemodResult {
     const { project, shouldWriteFiles } = options
     /**
      * Find `.tsx` files with co-located `.scss` file.
