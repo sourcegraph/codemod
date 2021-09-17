@@ -9,6 +9,14 @@ export async function formatWithStylelint(sourceCode: string, filePath: string):
             rules: {
                 // Hard-coded for now. Make it optional or delete it once it's not needed.
                 indentation: 4,
+                'declaration-block-trailing-semicolon': 'always',
+                'rule-empty-line-before': [
+                    'always-multi-line',
+                    {
+                        except: ['after-single-line-comment', 'first-nested'],
+                        ignore: ['after-comment', 'first-nested'],
+                    },
+                ],
             },
         },
     })

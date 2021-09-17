@@ -1,4 +1,4 @@
-import { AcceptedPlugin, Rule, ChildNode } from 'postcss'
+import { AcceptedPlugin, Rule, ChildNode, Root } from 'postcss'
 import parser, { isRoot, Selector } from 'postcss-selector-parser'
 
 interface PostcssToCssModulePluginOptions {
@@ -110,15 +110,19 @@ function updateChildSelectors(parent: Rule, child: Rule): string[] {
          * Some important comment about &__button selector.
          * .button { ... }
          */
-        const parentOrComment = pickComment(child.prev(), parent)
-        parentOrComment.after(child)
+        pickComment(child.prev(), parent.root())
+        parent.root().last?.after(child)
+    }
+
+    if (parent.nodes.length === 0) {
+        parent.remove()
     }
 
     return updatedChildSelectors
 }
 
 function replaceSelectorNodesIfNeeded(nodes: Selector): boolean {
-    return nodes.reduce<boolean>((shouldRemoveNesting, node) => {
+    return nodes.reduce<boolean>((shouldRemoveNesting, node, index) => {
         /**
          * Assume that all nested classes and ids not starting with `&` are global:
          *
@@ -167,7 +171,26 @@ function replaceSelectorNodesIfNeeded(nodes: Selector): boolean {
                     node.replaceWith(parse(''))
                     nextNode.replaceWith(parse(nextNodeValue.replace('__', '.')))
 
-                    return true
+                    /**
+                     * If its not the first node of the selector — keep nesting in place
+                     *
+                     * ```scss
+                     * .menu {
+                     *   &:hover &__button { ... }
+                     * }
+                     * ```
+                     *
+                     * Turns into:
+                     *
+                     * ```scss
+                     * .menu {
+                     *   &:hover .button { ... }
+                     * }
+                     * ```
+                     */
+                    if (index === 0) {
+                        return true
+                    }
                 }
             }
         }
@@ -181,9 +204,10 @@ function wrapSelectorInGlobalKeyword(selector: string): string {
 }
 
 // If passed node is a comment -> attach it to the end of the file and return it, otherwise return the passed node.
-function pickComment(maybeCommentNode: ChildNode | undefined, parent: Rule): Rule {
+function pickComment(maybeCommentNode: ChildNode | undefined, parent: Rule | Root): Rule | Root {
     if (maybeCommentNode && maybeCommentNode.type === 'comment') {
-        parent.after(maybeCommentNode)
+        parent.last?.after(maybeCommentNode)
+
         return maybeCommentNode as unknown as Rule
     }
 

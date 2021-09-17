@@ -1,3 +1,5 @@
+import camelcase from 'camelcase'
+
 import { decapitalize, isDefined } from '../../../utils'
 
 interface RemovedPrefix {
@@ -62,7 +64,7 @@ export function getPrefixesToRemove(exportNameMap: Record<string, string>): Remo
             if (matches) {
                 return {
                     prefix: matches[0],
-                    exportName: exportNameMap[matches[1]],
+                    exportName: camelcase(matches[1]),
                 }
             }
 
