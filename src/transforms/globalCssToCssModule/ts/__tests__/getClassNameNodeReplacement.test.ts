@@ -52,13 +52,20 @@ describe('getClassNameNodeReplacement', () => {
 
     describe.each(testCases)('in parent kind $parentKind', ({ fileSource, replacement: expectedReplacement }) => {
         const parentNode = getParentFromFirstClassNameNode(fileSource)
-        const getReplacement = (options?: Partial<GetClassNameNodeReplacementOptions>) =>
-            getClassNameNodeReplacement({
+        const getReplacement = (options?: Partial<GetClassNameNodeReplacementOptions>) => {
+            const result = getClassNameNodeReplacement({
                 parentNode,
                 exportNameReferences,
                 leftOverClassName,
                 ...options,
             })
+
+            if (result.isParentTransformed) {
+                throw new Error('No parent transform is expected')
+            }
+
+            return result.replacement
+        }
 
         it('returns correct replacement with `leftOverClassName` provided', () => {
             const replacement = getReplacement()

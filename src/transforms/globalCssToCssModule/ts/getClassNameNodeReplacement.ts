@@ -8,7 +8,7 @@ import {
     PropertyAccessExpression,
 } from 'typescript'
 
-import { wrapIntoClassNamesUtility } from '../../../utils/classNamesUtility'
+import { wrapIntoClassNamesUtility, CLASSNAMES_IDENTIFIER } from '../../../utils/classNamesUtility'
 
 export interface GetClassNameNodeReplacementOptions {
     parentNode: NodeParentType<StringLiteral>
@@ -18,8 +18,12 @@ export interface GetClassNameNodeReplacementOptions {
 
 function getClassNameNodeReplacementWithoutBraces(
     options: GetClassNameNodeReplacementOptions
-): PropertyAccessExpression | CallExpression {
-    const { leftOverClassName, exportNameReferences } = options
+): PropertyAccessExpression | CallExpression | Expression[] {
+    const { leftOverClassName, exportNameReferences, parentNode } = options
+
+    const isInClassnamesCall =
+        ts.isCallExpression(parentNode.compilerNode) &&
+        parentNode.compilerNode.expression.getText() === CLASSNAMES_IDENTIFIER
 
     // We need to use `classNames` utility for multiple `exportNames` or for a combination of the `exportName` and `StringLiteral`.
     // className={classNames('d-flex mr-1 kek kek--primary')} -> className={classNames('d-flex mr-1', styles.kek, styles.kekPrimary)}
@@ -30,6 +34,10 @@ function getClassNameNodeReplacementWithoutBraces(
             classNamesCallArguments.unshift(ts.factory.createStringLiteral(leftOverClassName))
         }
 
+        if (isInClassnamesCall) {
+            return classNamesCallArguments
+        }
+
         return wrapIntoClassNamesUtility(classNamesCallArguments)
     }
 
@@ -38,11 +46,25 @@ function getClassNameNodeReplacementWithoutBraces(
     return exportNameReferences[0]
 }
 
+type GetClassNameNodeReplacementResult =
+    | {
+          replacement: PropertyAccessExpression | JsxExpression | ComputedPropertyName | CallExpression
+          isParentTransformed: false
+      }
+    | {
+          replacement: null
+          isParentTransformed: true
+      }
+
+/**
+ * Transforms node with className. In case the parentNode
+ */
 export function getClassNameNodeReplacement(
     options: GetClassNameNodeReplacementOptions
-): PropertyAccessExpression | JsxExpression | ComputedPropertyName | CallExpression {
+): GetClassNameNodeReplacementResult {
     const { parentNode, exportNameReferences } = options
     const parentKind = parentNode.getKind()
+    const parentCompilerNode = parentNode.compilerNode
 
     if (exportNameReferences.length === 0) {
         throw new Error('`exportNameReferences` should not be empty!')
@@ -50,19 +72,43 @@ export function getClassNameNodeReplacement(
 
     const replacementWithoutBraces = getClassNameNodeReplacementWithoutBraces(options)
 
+    if (Array.isArray(replacementWithoutBraces)) {
+        if (ts.isCallExpression(parentCompilerNode)) {
+            // In case replacement is already in `classNames` call —> transform the parentNode
+            // and return `false` to restart node transform to avoid missing nested items which were unmounted during parentNode change.
+            parentNode.transform(() =>
+                ts.factory.createCallExpression(parentCompilerNode.expression, undefined, [
+                    ...replacementWithoutBraces,
+                    ...parentCompilerNode.arguments.filter(argument => argument.kind !== SyntaxKind.StringLiteral),
+                ])
+            )
+
+            return { isParentTransformed: true, replacement: null }
+        }
+
+        throw new Error(`Unhandled parentNode: ${parentNode.getFullText()}`)
+    }
+
+    if (
+        parentKind === SyntaxKind.ConditionalExpression ||
+        parentKind === SyntaxKind.CallExpression ||
+        parentKind === SyntaxKind.BinaryExpression
+    ) {
+        // Replace one class string inside of `ConditionalExpression` with the `exportName`.
+        // className={classNames('d-flex', isActive ? 'kek' : 'pek')} -> className={classNames('d-flex', isActive ? styles.kek : 'pek')}
+        return { isParentTransformed: false, replacement: replacementWithoutBraces }
+    }
     if (parentKind === SyntaxKind.JsxAttribute) {
-        return ts.factory.createJsxExpression(undefined, replacementWithoutBraces)
+        const replacement = ts.factory.createJsxExpression(undefined, replacementWithoutBraces)
+
+        return { isParentTransformed: false, replacement }
     }
 
     if (parentKind === SyntaxKind.PropertyAssignment) {
-        return ts.factory.createComputedPropertyName(replacementWithoutBraces)
+        const replacement = ts.factory.createComputedPropertyName(replacementWithoutBraces)
+
+        return { isParentTransformed: false, replacement }
     }
 
-    if (parentKind === SyntaxKind.ConditionalExpression || parentKind === SyntaxKind.CallExpression) {
-        // Replace one class string inside of `ConditionalExpression` with the `exportName`.
-        // className={classNames('d-flex', isActive ? 'kek' : 'pek')} -> className={classNames('d-flex', isActive ? styles.kek : 'pek')}
-        return replacementWithoutBraces
-    }
-
-    throw new Error(`Unsupported 'parentNode' type: ${parentNode.getKindName()}`)
+    throw new Error(`Unsupported 'parentNode' type: ${parentNode.getKindName()} ${parentNode.getFullText()}`)
 }

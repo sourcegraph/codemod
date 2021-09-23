@@ -10,9 +10,7 @@ export function getNodesWithClassName(sourceFile: SourceFile): (Identifier | Str
         .filter(identifier => identifier.getParent().compilerNode.kind === SyntaxKind.PropertyAssignment)
 
     // <div className='kek' /> — 'kek' is a `StringLiteral` inside  of the `JsxAttribute`.
-    const classNameStringLiterals = classNameJsxAttributes.flatMap(classNameJsxAttribute =>
-        classNameJsxAttribute.getDescendantsOfKind(SyntaxKind.StringLiteral)
-    )
+    const stringLiterals = sourceFile.getDescendantsOfKind(SyntaxKind.StringLiteral)
 
-    return [...classNameIdentifiers, ...classNameStringLiterals]
+    return [...classNameIdentifiers, ...stringLiterals]
 }

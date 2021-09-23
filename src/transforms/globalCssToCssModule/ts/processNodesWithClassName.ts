@@ -8,6 +8,7 @@ export const STYLES_IDENTIFIER = 'styles'
 interface ProcessNodesWithClassNameOptions {
     nodesWithClassName: (Identifier | StringLiteral)[]
     exportNameMap: Record<string, string>
+    usageStats: Record<string, boolean>
 }
 
 /**
@@ -36,9 +37,11 @@ interface ProcessNodesWithClassNameOptions {
  * Nodes without matching `exportNameMap` classes will be skipped without changes.
  *
  * <div className="d-flex m-1" /> -> left without changes
+ *
+ * @returns areAllNodesProcessed: boolean
  */
-export function processNodesWithClassName(options: ProcessNodesWithClassNameOptions): void {
-    const { nodesWithClassName, exportNameMap } = options
+export function processNodesWithClassName(options: ProcessNodesWithClassNameOptions): boolean {
+    const { nodesWithClassName, exportNameMap, usageStats } = options
 
     for (const nodeWithClassName of nodesWithClassName) {
         const classNameStringValue =
@@ -46,7 +49,11 @@ export function processNodesWithClassName(options: ProcessNodesWithClassNameOpti
                 ? nodeWithClassName.getLiteralText()
                 : nodeWithClassName.getText()
 
-        const { exportNames, leftOverClassnames } = splitClassName(classNameStringValue, exportNameMap)
+        const { exportNames, leftOverClassnames } = splitClassName({
+            className: classNameStringValue,
+            exportNameMap,
+            usageStats,
+        })
 
         // There's nothing to update in this `className` node.
         if (exportNames.length === 0) {
@@ -57,12 +64,18 @@ export function processNodesWithClassName(options: ProcessNodesWithClassNameOpti
             ts.factory.createPropertyAccessExpression(ts.factory.createIdentifier(STYLES_IDENTIFIER), exportName)
         )
 
-        nodeWithClassName.transform(() =>
-            getClassNameNodeReplacement({
-                parentNode: nodeWithClassName.getParent(),
-                leftOverClassName: leftOverClassnames.join(' '),
-                exportNameReferences,
-            })
-        )
+        const result = getClassNameNodeReplacement({
+            parentNode: nodeWithClassName.getParent(),
+            leftOverClassName: leftOverClassnames.join(' '),
+            exportNameReferences,
+        })
+
+        if (result.isParentTransformed) {
+            return false
+        }
+
+        nodeWithClassName.transform(() => result.replacement)
     }
+
+    return true
 }

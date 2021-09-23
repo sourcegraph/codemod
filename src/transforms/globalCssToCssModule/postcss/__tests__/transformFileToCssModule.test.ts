@@ -32,6 +32,10 @@ describe('transformFileToCssModule', () => {
                     white-space: nowrap;
                 }
 
+                &:disabled &__button {
+                    display: none;
+                }
+
                 @media (--xs-breakpoint-down) {
                     border-radius: var(--border-radius);
                 }
@@ -67,20 +71,24 @@ describe('transformFileToCssModule', () => {
                         white-space: nowrap;
                     }
 
+                    &:disabled .button {
+                        display: none;
+                    }
+
                     @media (--xs-breakpoint-down) {
                         border-radius: var(--border-radius);
                     }
-                }
-
-                /* &__button comment*/
-                .button {
-                    margin-top: 1px;
                 }
 
                 :global(.theme-light) {
                     .spacer {
                         flex: 1 1 0;
                     }
+                }
+
+                /* &__button comment*/
+                .button {
+                    margin-top: 1px;
                 }
         `
 

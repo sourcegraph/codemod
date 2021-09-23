@@ -9,8 +9,8 @@ import { addClassNamesUtilImportIfNeeded } from '../../utils/classNamesUtility'
 
 import { getCssModuleExportNameMap } from './postcss/getCssModuleExportNameMap'
 import { transformFileToCssModule } from './postcss/transformFileToCssModule'
-import { getNodesWithClassName } from './ts/getNodesWithClassName'
-import { STYLES_IDENTIFIER, processNodesWithClassName } from './ts/processNodesWithClassName'
+import { STYLES_IDENTIFIER } from './ts/processNodesWithClassName'
+import { transformComponentFile } from './ts/transformComponentFile'
 
 /**
  * Convert globally scoped stylesheet tied to the React component into a CSS Module.
@@ -68,11 +68,7 @@ export async function globalCssToCssModule(options: CodemodOptions): CodemodResu
             sourceFilePath: cssFilePath,
         })
 
-        processNodesWithClassName({
-            exportNameMap,
-            nodesWithClassName: getNodesWithClassName(tsSourceFile),
-        })
-
+        transformComponentFile({ tsSourceFile, exportNameMap, cssModuleFileName })
         addClassNamesUtilImportIfNeeded(tsSourceFile)
         tsSourceFile.addImportDeclaration({
             defaultImport: STYLES_IDENTIFIER,

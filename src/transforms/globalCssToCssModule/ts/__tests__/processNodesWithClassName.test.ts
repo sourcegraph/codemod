@@ -21,6 +21,7 @@ describe('processNodesWithClassName', () => {
         `)
 
         processNodesWithClassName({
+            usageStats: {},
             nodesWithClassName: getNodesWithClassName(sourceFile),
             exportNameMap: {
                 kek: 'kek',
