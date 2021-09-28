@@ -92,12 +92,14 @@ export function getClassNameNodeReplacement(
     if (
         parentKind === SyntaxKind.ConditionalExpression ||
         parentKind === SyntaxKind.CallExpression ||
-        parentKind === SyntaxKind.BinaryExpression
+        parentKind === SyntaxKind.BinaryExpression ||
+        parentKind === SyntaxKind.VariableDeclaration
     ) {
         // Replace one class string inside of `ConditionalExpression` with the `exportName`.
         // className={classNames('d-flex', isActive ? 'kek' : 'pek')} -> className={classNames('d-flex', isActive ? styles.kek : 'pek')}
         return { isParentTransformed: false, replacement: replacementWithoutBraces }
     }
+
     if (parentKind === SyntaxKind.JsxAttribute) {
         const replacement = ts.factory.createJsxExpression(undefined, replacementWithoutBraces)
 

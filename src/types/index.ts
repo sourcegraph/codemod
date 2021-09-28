@@ -18,4 +18,6 @@ export interface CodemodOptions {
     project: Project
     /** If `true` persist changes made by the codemod to the filesystem. */
     shouldWriteFiles?: boolean
+    /** If `true` format Typescript source files with `prettier-eslint`. */
+    shouldFormat?: boolean
 }

@@ -10,7 +10,7 @@ describe('globalCssToCssModule', () => {
     it('transforms correctly', async () => {
         const project = new Project()
         project.addSourceFilesAtPaths(TARGET_FILE)
-        const codemodResults = await globalCssToCssModule({ project })
+        const codemodResults = await globalCssToCssModule({ project, shouldFormat: true })
 
         expect(codemodResults).toBeTruthy()
 
