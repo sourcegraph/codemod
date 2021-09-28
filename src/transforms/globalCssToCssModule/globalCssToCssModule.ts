@@ -25,7 +25,7 @@ import { transformComponentFile } from './ts/transformComponentFile'
  *
  */
 export async function globalCssToCssModule(options: CodemodOptions): CodemodResult {
-    const { project, shouldWriteFiles } = options
+    const { project, shouldWriteFiles, shouldFormat } = options
     /**
      * Find `.tsx` files with co-located `.scss` file.
      * For example `RepoHeader.tsx` should have matching `RepoHeader.scss` in the same folder.
@@ -75,7 +75,9 @@ export async function globalCssToCssModule(options: CodemodOptions): CodemodResu
             moduleSpecifier: `./${path.parse(cssModuleFileName).base}`,
         })
 
-        formatWithPrettierEslint(tsSourceFile)
+        if (shouldFormat) {
+            formatWithPrettierEslint(tsSourceFile)
+        }
         const formattedCssModuleSource = await formatWithStylelint(cssModuleSource, cssFilePath)
 
         /**
