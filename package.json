@@ -61,7 +61,7 @@
     "@sourcegraph/tsconfig": "^4.0.1",
     "@types/css-modules-loader-core": "1.1.0",
     "@types/eslint": "7.28.0",
-    "@types/jest": "27.0.1",
+    "@types/jest": "27.0.2",
     "@types/node": "16.4.1",
     "@types/signale": "1.4.2",
     "@types/stylelint": "13.13.2",
