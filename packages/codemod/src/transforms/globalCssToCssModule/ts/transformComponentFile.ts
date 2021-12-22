@@ -16,7 +16,11 @@ export function transformComponentFile(options: TransformComponentFileOptions): 
     const { tsSourceFile, exportNameMap, cssModuleFileName } = options
 
     // Object to collect CSS classes usage and report unused classes after the codemod.
-    const usageStats = Object.fromEntries(Object.keys(exportNameMap).map(className => [className, false]))
+    const usageStats = Object.fromEntries(
+        Object.keys(exportNameMap).map(className => {
+            return [className, false]
+        })
+    )
 
     let areAllNodesProcessed = false
 
@@ -30,7 +34,9 @@ export function transformComponentFile(options: TransformComponentFileOptions): 
     }
 
     const unusedClassNames = Object.entries(usageStats)
-        .map(([className, isUsed]) => (isUsed ? undefined : className))
+        .map(([className, isUsed]) => {
+            return isUsed ? undefined : className
+        })
         .filter(isDefined)
 
     if (unusedClassNames.length > 0) {

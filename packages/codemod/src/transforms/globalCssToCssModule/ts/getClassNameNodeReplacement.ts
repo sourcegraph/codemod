@@ -76,12 +76,14 @@ export function getClassNameNodeReplacement(
         if (ts.isCallExpression(parentCompilerNode)) {
             // In case replacement is already in `classNames` call —> transform the parentNode
             // and return `false` to restart node transform to avoid missing nested items which were unmounted during parentNode change.
-            parentNode.transform(() =>
-                ts.factory.createCallExpression(parentCompilerNode.expression, undefined, [
+            parentNode.transform(() => {
+                return ts.factory.createCallExpression(parentCompilerNode.expression, undefined, [
                     ...replacementWithoutBraces,
-                    ...parentCompilerNode.arguments.filter(argument => argument.kind !== SyntaxKind.StringLiteral),
+                    ...parentCompilerNode.arguments.filter(argument => {
+                        return argument.kind !== SyntaxKind.StringLiteral
+                    }),
                 ])
-            )
+            })
 
             return { isParentTransformed: true, replacement: null }
         }

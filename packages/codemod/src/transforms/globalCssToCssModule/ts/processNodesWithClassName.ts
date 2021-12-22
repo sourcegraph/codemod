@@ -60,9 +60,9 @@ export function processNodesWithClassName(options: ProcessNodesWithClassNameOpti
             continue
         }
 
-        const exportNameReferences = exportNames.map(exportName =>
-            ts.factory.createPropertyAccessExpression(ts.factory.createIdentifier(STYLES_IDENTIFIER), exportName)
-        )
+        const exportNameReferences = exportNames.map(exportName => {
+            return ts.factory.createPropertyAccessExpression(ts.factory.createIdentifier(STYLES_IDENTIFIER), exportName)
+        })
 
         const result = getClassNameNodeReplacement({
             parentNode: nodeWithClassName.getParent(),
@@ -74,7 +74,9 @@ export function processNodesWithClassName(options: ProcessNodesWithClassNameOpti
             return false
         }
 
-        nodeWithClassName.transform(() => result.replacement)
+        nodeWithClassName.transform(() => {
+            return result.replacement
+        })
     }
 
     return true

@@ -10,8 +10,9 @@ const EXPORT_NAME_PREFIX = 'prefix'
 // The simplest subset of logic used by css-modules loaders and processors.
 const cssModulesLoaderCore = new CssModuleLoaderCore()
 const noOpPathFetcher = (): void => {}
-const sourceCssToClassNames = (source: Source): Promise<Core.Result> =>
-    cssModulesLoaderCore.load(source, EXPORT_NAME_PREFIX, undefined, noOpPathFetcher)
+const sourceCssToClassNames = (source: Source): Promise<Core.Result> => {
+    return cssModulesLoaderCore.load(source, EXPORT_NAME_PREFIX, undefined, noOpPathFetcher)
+}
 
 const removeCssNestingProcessor = createCssProcessor(postcssNested)
 

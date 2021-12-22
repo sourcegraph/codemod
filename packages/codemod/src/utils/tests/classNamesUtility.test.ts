@@ -25,7 +25,9 @@ describe('`classNames` helpers', () => {
 
         it('adds `classNames` import if needed', () => {
             const sourceFile = createSourceFile('<div className={classNames("wow")} />')
-            const hasClassNamesImport = () => sourceFile.getText().includes(classNamesImport)
+            const hasClassNamesImport = () => {
+                return sourceFile.getText().includes(classNamesImport)
+            }
 
             expect(hasClassNamesImport()).toBe(false)
             addClassNamesUtilImportIfNeeded(sourceFile)
