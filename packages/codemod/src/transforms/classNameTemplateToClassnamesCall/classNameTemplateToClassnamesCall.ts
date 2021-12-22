@@ -21,15 +21,19 @@ export async function classNameTemplateToClassnamesCall(options: CodemodOptions)
         signale.info(`Processing file "${tsFilePath}"`)
 
         const jsxAttributes = tsSourceFile.getDescendantsOfKind(SyntaxKind.JsxAttribute)
-        const classNameJsxAttributes = jsxAttributes.filter(identifier => identifier.getName() === 'className')
+        const classNameJsxAttributes = jsxAttributes.filter(identifier => {
+            return identifier.getName() === 'className'
+        })
 
-        const classNameTemplateExpressions = classNameJsxAttributes.flatMap(classNameJsxAttribute =>
-            classNameJsxAttribute.getDescendantsOfKind(SyntaxKind.TemplateExpression)
-        )
+        const classNameTemplateExpressions = classNameJsxAttributes.flatMap(classNameJsxAttribute => {
+            return classNameJsxAttribute.getDescendantsOfKind(SyntaxKind.TemplateExpression)
+        })
 
         for (const templateExpression of classNameTemplateExpressions) {
             try {
-                templateExpression.transform(() => getTemplateExpressionReplacement(templateExpression))
+                templateExpression.transform(() => {
+                    return getTemplateExpressionReplacement(templateExpression)
+                })
             } catch (error) {
                 console.error(error)
             }

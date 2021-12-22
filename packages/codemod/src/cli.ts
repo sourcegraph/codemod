@@ -36,7 +36,11 @@ program
         if (results) {
             if (shouldWriteFiles) {
                 signale.info('Persisting codemod changes to the filesystem...')
-                await Promise.all(results.map(result => result.fsWritePromise))
+                await Promise.all(
+                    results.map(result => {
+                        return result.fsWritePromise
+                    })
+                )
                 signale.info('Persisting codemod changes completed')
             } else {
                 console.log(results)

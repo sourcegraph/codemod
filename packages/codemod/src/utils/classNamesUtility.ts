@@ -11,13 +11,13 @@ export function wrapIntoClassNamesUtility(classNames: Expression[]): ts.CallExpr
 
 // Adds `classnames` import to the `sourceFile` if `classNames` util is used and import doesn't exist.
 export function addClassNamesUtilImportIfNeeded(sourceFile: SourceFile): void {
-    const isClassNamesUsed = sourceFile
-        .getDescendantsOfKind(SyntaxKind.Identifier)
-        .some(identifier => identifier.getText() === CLASSNAMES_IDENTIFIER)
+    const isClassNamesUsed = sourceFile.getDescendantsOfKind(SyntaxKind.Identifier).some(identifier => {
+        return identifier.getText() === CLASSNAMES_IDENTIFIER
+    })
 
-    const hasClassNamesImport = sourceFile
-        .getImportDeclarations()
-        .some(declaration => declaration.getModuleSpecifier().getLiteralText() === CLASSNAMES_MODULE_SPECIFIER)
+    const hasClassNamesImport = sourceFile.getImportDeclarations().some(declaration => {
+        return declaration.getModuleSpecifier().getLiteralText() === CLASSNAMES_MODULE_SPECIFIER
+    })
 
     if (isClassNamesUsed && !hasClassNamesImport) {
         sourceFile.addImportDeclaration({

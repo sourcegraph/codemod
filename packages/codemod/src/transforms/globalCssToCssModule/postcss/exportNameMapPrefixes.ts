@@ -29,9 +29,9 @@ interface RemovePrefixFromExportNameIfNeededOptions {
 export function removePrefixFromExportNameIfNeeded(options: RemovePrefixFromExportNameIfNeededOptions): string {
     const { className, exportName, prefixesToRemove } = options
 
-    const removedPrefix = prefixesToRemove.find(
-        removedPrefix => exportName.startsWith(removedPrefix.exportName) && className.startsWith(removedPrefix.prefix)
-    )
+    const removedPrefix = prefixesToRemove.find(removedPrefix => {
+        return exportName.startsWith(removedPrefix.exportName) && className.startsWith(removedPrefix.prefix)
+    })
 
     if (removedPrefix) {
         return decapitalize(exportName.replace(removedPrefix.exportName, ''))

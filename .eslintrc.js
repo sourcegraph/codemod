@@ -23,5 +23,6 @@ module.exports = {
   },
   rules: {
     'no-sync': 'off',
+    'arrow-body-style': ['error', 'always'],
   },
 }

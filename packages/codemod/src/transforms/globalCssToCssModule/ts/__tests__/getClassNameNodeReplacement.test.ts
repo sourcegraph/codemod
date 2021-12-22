@@ -13,9 +13,9 @@ describe('getClassNameNodeReplacement', () => {
         return nodeWithClassName.getParent()
     }
 
-    const exportNameReferences = ['button', 'buttonActive'].map(exportName =>
-        ts.factory.createPropertyAccessExpression(ts.factory.createIdentifier('styles'), exportName)
-    )
+    const exportNameReferences = ['button', 'buttonActive'].map(exportName => {
+        return ts.factory.createPropertyAccessExpression(ts.factory.createIdentifier('styles'), exportName)
+    })
 
     const testCases = [
         {
@@ -91,7 +91,9 @@ describe('getClassNameNodeReplacement', () => {
         })
 
         it('throws if `exportNameReferences` is empty', () => {
-            expect(() => getReplacement({ exportNameReferences: [] })).toThrow()
+            expect(() => {
+                return getReplacement({ exportNameReferences: [] })
+            }).toThrow()
         })
     })
 })

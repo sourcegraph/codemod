@@ -31,7 +31,12 @@ export function postcssToCssModulePlugin(options: PostcssToCssModulePluginOption
              * .theme-light -> :global(.theme-light)
              * ```
              */
-            if (isRootRule && globalTopLevelClasses.some(globalClass => parentRule.selector.includes(globalClass))) {
+            if (
+                isRootRule &&
+                globalTopLevelClasses.some(globalClass => {
+                    return parentRule.selector.includes(globalClass)
+                })
+            ) {
                 for (const globalClass of globalTopLevelClasses) {
                     parentRule.selector = parentRule.selector.replace(
                         globalClass,
@@ -234,5 +239,6 @@ function parse(source: string, rule?: Rule): Selector {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return nodes!.at(0)
 }
