@@ -1,6 +1,6 @@
 import { printNode, SyntaxKind, ts } from 'ts-morph'
-import { createSourceFile } from 'utils/tests'
 
+import { createSourceFile } from '../../../../utils/tests'
 import { getClassNameNodeReplacement, GetClassNameNodeReplacementOptions } from '../getClassNameNodeReplacement'
 import { getNodesWithClassName } from '../getNodesWithClassName'
 

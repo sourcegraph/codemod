@@ -1,6 +1,6 @@
 import { SyntaxKind } from 'ts-morph'
-import { createSourceFile } from 'utils/tests'
 
+import { createSourceFile } from '../../../../utils/tests'
 import { getNodesWithClassName } from '../getNodesWithClassName'
 
 describe('getNodesWithClassName', () => {

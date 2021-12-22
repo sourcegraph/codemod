@@ -127,9 +127,8 @@ exports[`globalCssToCssModule transforms correctly 1`] = `
 `;
 
 exports[`globalCssToCssModule transforms correctly 2`] = `
-"import classNames from 'classnames'
-import React from 'react'
-
+"import React from 'react'
+import classNames from 'classnames'
 import styles from './Kek.module.scss'
 
 export const Kek = () => {
@@ -142,7 +141,7 @@ export const Kek = () => {
                     [styles.kek]: false,
                     [classNames('d-flex mr-1', styles.kek)]: isActive,
                 })}
-             />
+            ></div>
             It's a component<p className={styles.logo}>wow</p>
             <div className={classNames('m-2 d-flex m-1', styles.repoHeader)}>Another one!</div>
         </div>

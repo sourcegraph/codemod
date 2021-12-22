@@ -11,7 +11,7 @@ A collection of codemods powered by TS-Morph and PostCSS
 ## Use
 
 ```sh
-npx @sourcegraph/codemod --transform global-css-to-css-modules
+yarn --cwd ./packages/codemod transform global-css-to-css-modules
 ```
 
 ## Build

@@ -1,3 +1,4 @@
+/* eslint-disable rxjs/throw-error, etc/throw-error */
 import { AcceptedPlugin, Rule, ChildNode, Root } from 'postcss'
 import parser, { isRoot, Selector } from 'postcss-selector-parser'
 
@@ -228,7 +229,7 @@ function parse(source: string, rule?: Rule): Selector {
     } catch (error) {
         if (source.includes(':')) {
             throw rule ? rule.error('Missed semicolon') : error
-        } else {
+        } else if (error instanceof Error) {
             throw rule ? rule.error(error.message) : error
         }
     }

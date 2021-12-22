@@ -1,6 +1,5 @@
 import { printNode } from 'ts-morph'
 import { factory } from 'typescript'
-import { createSourceFile } from 'utils/tests'
 
 import {
     CLASSNAMES_IDENTIFIER,
@@ -8,6 +7,8 @@ import {
     wrapIntoClassNamesUtility,
     addClassNamesUtilImportIfNeeded,
 } from '../classNamesUtility'
+
+import { createSourceFile } from '.'
 
 describe('`classNames` helpers', () => {
     describe('wrapIntoClassNamesUtility', () => {

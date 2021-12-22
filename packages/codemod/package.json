@@ -1,0 +1,26 @@
+{
+  "name": "@sourcegraph/codemod",
+  "description": "A collection of codemods powered by TS-Morph and PostCSS",
+  "version": "0.0.0-DEVELOPMENT",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sourcegraph/codemod.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/cli.js",
+  "types": "dist/cli.d.ts",
+  "bin": "./dist/cli.js",
+  "scripts": {
+    "transform": "ts-node-transpile-only ./src/cli.ts",
+    "test": "jest",
+    "semantic-release": "semantic-release",
+    "format": "prettier '**/*.{js?(on),ts?(x),scss,md,yml}' --write --list-different",
+    "format:check": "npm run prettier -- --write=false",
+    "lint": "eslint './src/**/*.ts?(x)'",
+    "build": "tsc -p .",
+    "watch": "tsc -p . -w"
+  }
+}
