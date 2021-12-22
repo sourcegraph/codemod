@@ -1,7 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 import { printNode, SyntaxKind } from 'ts-morph'
-import { createSourceFile } from 'utils/tests'
 
+import { createSourceFile } from '../../../utils/tests'
 import { getTemplateExpressionReplacement } from '../getTemplateExpressionReplacement'
 
 describe('getTemplateExpressionReplacement', () => {

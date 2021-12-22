@@ -1,5 +1,4 @@
-import { createSourceFile } from 'utils/tests'
-
+import { createSourceFile } from '../../../../utils/tests'
 import { getNodesWithClassName } from '../getNodesWithClassName'
 import { processNodesWithClassName } from '../processNodesWithClassName'
 

@@ -1,2 +1,5 @@
-dist
-fixtures
+**/fixtures/**/*
+**/dist
+**/coverage
+**/.vscode
+**/.vs

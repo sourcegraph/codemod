@@ -14,9 +14,9 @@ jobs:
         run: yarn install
       - name: Run build
         run: yarn build
-      - name: Run prettier
-        run: yarn prettier-check
-      - name: Run eslint
-        run: yarn eslint
+      - name: Run format
+        run: yarn format:check
+      - name: Run lint
+        run: yarn lint
       - name: Run tests
         run: yarn test
