@@ -1,9 +1,13 @@
 interface SplitClassNameOptions {
+    // ClassName value string which might contain replaceable parts.
     className: string
+    // Mapping between classes and exportNames.
     exportNameMap: Record<string, string>
+    // Object to collect replaced classes usage in React component.
     usageStats: Record<string, boolean>
 }
 
+// Object that contains array of exportNames found in the className and the left over value.
 interface SplitClassNameResult {
     exportNames: string[]
     leftOverClassnames: string[]
@@ -12,11 +16,6 @@ interface SplitClassNameResult {
 /**
  * Example: splitClassName({ className: 'kek--wow d-flex mr-1', exportNameMap: { 'kek--wow': 'kekWow' }, usageStats: {})
  * returns: { exportNames: ['kekWow'], leftOverClassnames: ['d-flex', 'mr-1'] }
- *
- * @param className ClassName value string which might contain replaceable parts.
- * @param exportNameMap Mapping between classes and exportNames.
- * @param usageStats Object to collect replaced classes usage in React component.
- * @returns Object that contains array of exportNames found in the className and the left over value.
  */
 export function splitClassName(options: SplitClassNameOptions): SplitClassNameResult {
     const { className, exportNameMap, usageStats } = options
