@@ -8,5 +8,8 @@
     {
       "path": "./packages/common/tsconfig.build.json",
     },
+    {
+      "path": "./packages/toolkit-ts/tsconfig.build.json",
+    },
   ],
 }

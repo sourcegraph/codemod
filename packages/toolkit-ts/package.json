@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "name": "@sourcegraph/codemod-toolkit-ts",
+  "version": "1.0.0",
+  "description": "@sourcegraph/codemod-toolkit-ts",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --build ./tsconfig.build.json",
+    "build:watch": "tsc  --build ./tsconfig.build.json --watch",
+    "build:clean": "tsc  --build --clean ./tsconfig.build.json && rimraf dist ./*.tsbuildinfo",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "format": "prettier --write \"./**/*.{ts,js,json,md}\" --ignore-path ../../.prettierignore",
+    "lint": "eslint './src/**/*.ts?(x)'"
+  },
+  "dependencies": {
+    "@sourcegraph/codemod-common": "1.0.0"
+  }
+}
