@@ -3,13 +3,25 @@
   "files": [],
   "references": [
     {
-      "path": "./packages/codemod",
-    },
-    {
       "path": "./packages/common/tsconfig.build.json",
     },
     {
+      "path": "./packages/cli/tsconfig.build.json",
+    },
+    {
       "path": "./packages/toolkit-ts/tsconfig.build.json",
+    },
+    {
+      "path": "./packages/toolkit-css/tsconfig.build.json",
+    },
+    {
+      "path": "./packages/toolkit-packages/tsconfig.build.json",
+    },
+    {
+      "path": "./packages/transforms/tsconfig.build.json",
+    },
+    {
+      "path": "./packages/eslint-plugin/tsconfig.build.json",
     },
   ],
 }

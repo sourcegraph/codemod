@@ -16,6 +16,7 @@
     "lint": "eslint './src/**/*.ts?(x)'"
   },
   "dependencies": {
-    "@sourcegraph/codemod-common": "1.0.0"
+    "@sourcegraph/codemod-common": "1.0.0",
+    "@sourcegraph/codemod-cli": "1.0.0"
   }
 }

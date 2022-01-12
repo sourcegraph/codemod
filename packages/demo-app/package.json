@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "name": "@sourcegraph/app",
+  "version": "1.10.1",
+  "description": "The Sourcegraph web app",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "tsc --build ./tsconfig.build.json",
+    "build:watch": "tsc  --build ./tsconfig.build.json --watch",
+    "build:clean": "tsc  --build --clean ./tsconfig.build.json && rimraf dist ./*.tsbuildinfo",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "format": "prettier --write \"./**/*.{ts,js,json,md}\" --ignore-path ../../.prettierignore",
+    "lint": "echo 'this package is ignored'"
+  },
+  "devDependencies": {
+    "@sourcegraph/eslint-plugin-sourcegraph": "1.0.0",
+    "@types/react": "^17.0.37",
+    "react": "^17.0.2"
+  }
+}

@@ -1,15 +1,11 @@
-import { JsxOpeningElement, JsxSelfClosingElement, SyntaxKind } from 'ts-morph'
+import { JsxSelfClosingElement, SyntaxKind } from 'ts-morph'
 
-import { createNodeOfKind } from '@sourcegraph/codemod-common'
-
+import { createJsxOpeningElement, createNodeOfKind } from '../../../testing'
 import { setOnJsxTagElement, getTagName } from '../JsxTagElement'
 
 describe('setOnJsxTagElement', () => {
     it('updates the structure of `JsxOpeningElement`', () => {
-        const { node } = createNodeOfKind<JsxOpeningElement>(
-            'const x = <button>hey</button>',
-            SyntaxKind.JsxOpeningElement
-        )
+        const node = createJsxOpeningElement('const x = <button>hey</button>')
 
         setOnJsxTagElement(node, { name: 'Container' })
 

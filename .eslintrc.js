@@ -11,7 +11,7 @@ module.exports = {
       jsx: true,
     },
     EXPERIMENTAL_useSourceOfProjectReferenceRedirect: true,
-    project: ['./tsconfig.eslint.json', './packages/*/tsconfig.json'],
+    project: ['./tsconfig.eslint.json', './packages/!(demo-app)/tsconfig.json'],
     tsconfigRootDir: __dirname,
     warnOnUnsupportedTypeScriptVersion: false,
   },
@@ -23,5 +23,6 @@ module.exports = {
   rules: {
     'no-sync': 'off',
     'arrow-body-style': ['error', 'always'],
+    'ban/ban': 'off',
   },
 }

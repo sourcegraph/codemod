@@ -9,11 +9,12 @@
     "url": "https://github.com/sourcegraph/codemod.git"
   },
   "scripts": {
+    "transform": "yarn workspace @sourcegraph/codemod-cli transform",
     "test": "jest",
     "release": "semantic-release",
     "format": "prettier '**/*.{js?(on),ts?(x),scss,md,yml}' --write --list-different  --ignore-path ./.prettierignore",
     "format:check": "yarn format --write=false",
-    "lint": "eslint .",
+    "lint": "eslint --ignore-pattern 'demo-app' --cache .",
     "build": "tsc --build",
     "build:clean": "tsc --build --clean && rimraf ./packages/*/dist ./packages/*/*.tsbuildinfo",
     "build:watch": "tsc --build --watch",
@@ -65,6 +66,7 @@
     "jest": "^27.0.6",
     "prettier": "^2.4.1",
     "semantic-release": "^17.4.4",
+    "ts-dedent": "^2.2.0",
     "ts-jest": "^27.1.2"
   },
   "resolutions": {

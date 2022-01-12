@@ -1,7 +1,7 @@
 import { JsxElementStructure, JsxOpeningElement, JsxSelfClosingElement, Node, ts } from 'ts-morph'
 
 /**
- * Union type for JSX element with JSX attributes to avoid
+ * Union type for Jsx element with Jsx attributes to avoid
  * handling `JsxOpeningElement` and `JsxSelfClosingElement` separately every time.
  */
 export type JsxTagElement = JsxOpeningElement | JsxSelfClosingElement

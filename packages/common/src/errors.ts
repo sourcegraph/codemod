@@ -1,15 +1,8 @@
 import { errors } from '@ts-morph/common'
-import { Node } from 'ts-morph'
 
 import { AnyFunction, NonVoidFunction } from './types'
 
 export { errors }
-
-export class ManualChangeError extends Error {
-    constructor(public node: Node, public message: string) {
-        super(message)
-    }
-}
 
 type NonVoidRecordMethods<T extends Record<string, AnyFunction>> = {
     [key in keyof T]: NonVoidFunction<T[key]>

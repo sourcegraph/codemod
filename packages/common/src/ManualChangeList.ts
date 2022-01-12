@@ -1,7 +1,12 @@
 import signale from 'signale'
 import { Node } from 'ts-morph'
 
-import { ManualChangeError } from './errors'
+// TODO: move Typescript specific logic to the `toolkit-ts` package.
+export class ManualChangeError extends Error {
+    constructor(public node: Node, public message: string) {
+        super(message)
+    }
+}
 
 export interface ManualChangeLog {
     node: Node
@@ -12,8 +17,8 @@ export type ManualChangesReported = Record<string, ManualChangeLog>
 
 export interface ManualChangeList {
     manualChangesReported: ManualChangesReported
-    throwManualChangeError(manualChangeLog: ManualChangeLog): void
-    addManualChangeLog(manualChangeLog: ManualChangeLog): void
+    throwManualChangeError(this: void, manualChangeLog: ManualChangeLog): void
+    addManualChangeLog(this: void, manualChangeLog: ManualChangeLog): void
 }
 
 // Used to avoid the duplicate reports on the same AST node.
@@ -39,7 +44,7 @@ export function logRequiredManualChanges(manualChangesReported: ManualChangesRep
     }
 }
 
-export function createManualChangeList(this: void): ManualChangeList {
+export function createManualChangeList(): ManualChangeList {
     const manualChangesReported: ManualChangesReported = {}
 
     function addManualChangeLog(manualChangeLog: ManualChangeLog): void {
