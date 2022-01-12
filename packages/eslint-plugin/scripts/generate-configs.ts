@@ -1,3 +1,4 @@
+// Copied from @typescript-eslint plugin.
 import fs from 'fs'
 import path from 'path'
 
