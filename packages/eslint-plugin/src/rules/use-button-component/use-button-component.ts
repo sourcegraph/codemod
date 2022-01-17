@@ -1,8 +1,9 @@
-import { ts } from 'ts-morph'
+import { TSESTree } from '@typescript-eslint/experimental-utils'
+import { ts, StringLiteral, JsxOpeningElement } from 'ts-morph'
 
 import { ButtonElementToComponent } from '@sourcegraph/codemod-transforms'
 
-import { createRule, getWrappedNode } from '../../utils'
+import { createRule, getNodeWrapper } from '../../utils'
 
 export const messages = {
     bannedClassnameMessage: 'Use the Wildcard component `<Button />` instead of the `{{name}}` class.',
@@ -22,22 +23,29 @@ export const useButtonComponent = createRule<[], keyof typeof messages>({
     },
     defaultOptions: [],
     create(context) {
+        const getWrappedNode = getNodeWrapper(context)
+
         return {
             JSXOpeningElement: node => {
-                const jsxOpeningElement = getWrappedNode<ts.JsxOpeningElement>(context, node)
+                const jsxOpeningElement = getWrappedNode<ts.JsxOpeningElement>(node, JsxOpeningElement)
+                const validationResult = ButtonElementToComponent.validateCodemodTarget.JsxTagElement(jsxOpeningElement)
 
-                if (ButtonElementToComponent.validateCodemodTarget.JsxTagElement(jsxOpeningElement)) {
+                if (validationResult) {
                     context.report({
                         node,
                         messageId: 'bannedJsxElementMessage',
                         data: {
-                            name: jsxOpeningElement.getTagNameNode().getText(),
+                            name: validationResult.tagName,
                         },
                     })
                 }
             },
-            Literal: node => {
-                const stringLiteralNode = getWrappedNode<ts.StringLiteral>(context, node)
+            'JsxAttribute Literal': (node: TSESTree.Literal) => {
+                if (typeof node.value !== 'string') {
+                    return
+                }
+
+                const stringLiteralNode = getWrappedNode<ts.StringLiteral>(node, StringLiteral)
                 const validationResult = ButtonElementToComponent.validateCodemodTarget.StringLiteral(stringLiteralNode)
 
                 if (validationResult) {

@@ -1,4 +1,4 @@
-import { printNode } from 'ts-morph'
+import { Node, printNode } from 'ts-morph'
 
 import {
     removeClassNameAndUpdateJsxElement,
@@ -16,11 +16,7 @@ import {
     addAsJsxAttribute,
 } from '@sourcegraph/codemod-toolkit-ts'
 
-import {
-    DEFAULT_ELEMENT_TO_CONVERT,
-    validateCodemodTarget,
-    validateCodemodTargetOrThrow,
-} from './validateCodemodTarget'
+import { validateCodemodTarget, validateCodemodTargetOrThrow, BANNED_TAG_NAME } from './validateCodemodTarget'
 
 interface ButtonElementToComponentOptions {
     /* 'Link', 'MenuItem', 'MenuButton', 'LoaderButton', 'label', 'a', 'div'*/
@@ -32,7 +28,7 @@ interface ButtonElementToComponentOptions {
  */
 export const buttonElementToComponent = runTransform<ButtonElementToComponentOptions>(context => {
     const { transformOptions, throwManualChangeError, addManualChangeLog } = context
-    const tagToConvert = transformOptions?.tagToConvert || DEFAULT_ELEMENT_TO_CONVERT
+    const tagToConvert = transformOptions?.tagToConvert || BANNED_TAG_NAME
 
     const jsxTagElementsToUpdate = new Set<JsxTagElement>()
 
@@ -41,10 +37,16 @@ export const buttonElementToComponent = runTransform<ButtonElementToComponentOpt
          * 1. Check if `StringLiteral` contains button classes.
          * 2. Remove matching classes from the `StringLiteral`.
          * 3. Add corresponding `JsxAttribute` after removal if needed. E.g., `variant="primary"`.
-         * 4. If `StringLiteral` was updated save reference to `JsxTagElement` to update in later.
+         * 4. If `StringLiteral` was updated save reference to `JsxTagElement` to update it later.
          */
         StringLiteral(stringLiteral) {
-            const { classNameMappings, jsxAttribute } = validateCodemodTargetOrThrow.StringLiteral(stringLiteral)
+            const { classNameMappings } = validateCodemodTargetOrThrow.StringLiteral(stringLiteral)
+            const jsxAttribute = getParentUntilOrThrow(stringLiteral, Node.isJsxAttribute)
+
+            if (!/classname/i.test(jsxAttribute.getName())) {
+                return
+            }
+
             const jsxTagElement = getParentUntilOrThrow(jsxAttribute, isJsxTagElement)
 
             if (!validateCodemodTarget.JsxTagElement(jsxTagElement, tagToConvert)) {
@@ -93,7 +95,7 @@ export const buttonElementToComponent = runTransform<ButtonElementToComponentOpt
                     removeJsxAttribute(jsxTagElement, 'type')
                 }
 
-                if (tagToConvert !== DEFAULT_ELEMENT_TO_CONVERT) {
+                if (tagToConvert !== BANNED_TAG_NAME) {
                     addAsJsxAttribute(jsxTagElement, tagToConvert)
                 }
 

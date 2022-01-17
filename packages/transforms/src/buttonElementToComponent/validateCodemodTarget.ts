@@ -1,44 +1,49 @@
-import { JsxAttribute, Node, StringLiteral } from 'ts-morph'
+import { StringLiteral } from 'ts-morph'
 
 import { throwFromMethodsIfUndefinedReturn } from '@sourcegraph/codemod-common'
-import { getClassNameRegExp, getParentUntilOrThrow, JsxTagElement } from '@sourcegraph/codemod-toolkit-ts'
+import { JsxTagElement } from '@sourcegraph/codemod-toolkit-ts'
 
 import { buttonClassNamesMapping, ClassNameMapping } from './buttonClassNamesMapping'
 
 interface StringLiteralValidatorResult {
     stringLiteral: StringLiteral
     classNameMappings: ClassNameMapping[]
-    jsxAttribute: JsxAttribute
 }
 
-export const DEFAULT_ELEMENT_TO_CONVERT = 'button'
+interface JsxTagElementValidatorResult {
+    jsxTagElement: JsxTagElement
+    tagName: string
+}
 
-// Used in corresponding eslint-rule.
+export const BANNED_TAG_NAME = 'button'
+
+// Used in `use-button-component` eslint-rule.
 export const validateCodemodTarget = {
     /**
-     * Returns `JsxTagElement` is tag name matches, 'button' by default.
+     * Returns `JsxTagElement` if tag name matches.
      */
-    JsxTagElement(jsxTagElement: JsxTagElement, tagName = DEFAULT_ELEMENT_TO_CONVERT): JsxTagElement | void {
-        if (jsxTagElement.getTagNameNode().getText() === tagName) {
-            return jsxTagElement
+    JsxTagElement(jsxTagElement: JsxTagElement, bannedTagName = BANNED_TAG_NAME): JsxTagElementValidatorResult | void {
+        const tagName = jsxTagElement.getTagNameNode().getText()
+
+        if (tagName === bannedTagName) {
+            return { jsxTagElement, tagName }
         }
     },
     /**
-     * Returns non-void result if received `StringLiteral`:
-     * 1. Has one of button classes like `btn-primary`.
-     * 2. Has `JsxAttribute` ancestor with `classname` in the attribute name.
+     * Returns non-void result if received `StringLiteral` has one of button classes like `btn-primary`.
      */
     StringLiteral(stringLiteral: StringLiteral): StringLiteralValidatorResult | void {
         const classNameMappings = buttonClassNamesMapping.filter(({ className }) => {
-            return getClassNameRegExp(className).test(stringLiteral.getLiteralValue())
+            return stringLiteral
+                .getLiteralValue()
+                .split(' ')
+                .some(word => {
+                    return word === className
+                })
         })
 
         if (classNameMappings.length !== 0) {
-            const jsxAttribute = getParentUntilOrThrow(stringLiteral, Node.isJsxAttribute)
-
-            if (/classname/i.test(jsxAttribute.getName())) {
-                return { stringLiteral, classNameMappings, jsxAttribute }
-            }
+            return { classNameMappings, stringLiteral }
         }
     },
 }

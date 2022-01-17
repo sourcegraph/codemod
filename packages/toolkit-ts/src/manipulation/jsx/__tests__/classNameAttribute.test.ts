@@ -53,4 +53,12 @@ describe('removeClassNameFromStringLiteral', () => {
             expectedResult: '',
         })
     })
+
+    it('supports multiple classNames', () => {
+        testClassNameRemoval({
+            initialValue: 'btn btn-primary',
+            valueToRemove: 'btn btn-primary',
+            expectedResult: '',
+        })
+    })
 })
