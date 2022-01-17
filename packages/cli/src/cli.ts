@@ -20,12 +20,14 @@ interface CodemodCliOptions extends TransformOptions {
     transform: string
 }
 
+const PROJECT_ROOT = path.resolve(__dirname, '../../../')
+
 program
     // TODO: make it `true` by default after switching to fast bulk format.
     .option('-f, --format [format]', 'Format Typescript source files with ESLint', false)
     .option('-w, --write [write]', 'Persist codemod changes to the filesystem', false)
-    .option('-t, --transform <transform>', 'Path to a Typescript module with one transform export')
-    .argument('<fileGlob>', 'File glob or globs to change files based on')
+    .option('-t, --transform <transform>', 'Absolute or relative to project root path to a transform module')
+    .argument('<fileGlob>', 'Absolute or relative to project root file glob to change files based on')
     .allowUnknownOption(true)
     .enablePositionalOptions(true)
     .addHelpText(
@@ -36,10 +38,12 @@ program
         yarn transform --write --tagToConvert=Link -t ./transformPath.ts 'globPath/**/*.{ts,tsx}'
     `
     )
-    .action(async (_argument: string, options: CodemodCliOptions) => {
-        const { fileGlob, transformOptions } = parseOptions()
-        const { write: shouldWriteFiles, format: shouldFormat, transform: transformPath } = options
-        const projectGlob = path.isAbsolute(fileGlob) ? fileGlob : path.join(process.cwd(), fileGlob)
+    .action(async (commandArgument: string, options: CodemodCliOptions) => {
+        const { fileGlob, transformOptions } = parseOptions(commandArgument)
+        const { write: shouldWriteFiles, format: shouldFormat, transform } = options
+
+        const projectGlob = path.isAbsolute(fileGlob) ? fileGlob : path.join(PROJECT_ROOT, fileGlob)
+        const transformPath = path.isAbsolute(transform) ? transform : path.join(PROJECT_ROOT, transform)
 
         signale.start(`Starting codemod "${transformPath}" with the project glob "${projectGlob}".`)
 
@@ -91,15 +95,11 @@ interface ParseOptionsResult {
     transformOptions: TransformOptions
 }
 
-function parseOptions(): ParseOptionsResult {
+function parseOptions(commandArgument: string): ParseOptionsResult {
     const { unknown } = program.parseOptions(process.argv)
 
     // TODO: find a better way to process and validate `transformOptions`.
-    const fileGlob = unknown.pop()
-
-    if (typeof fileGlob === 'undefined') {
-        throw new TypeError('Please provide file glob argument. Use --help for more details.')
-    }
+    const fileGlob = unknown.pop() || commandArgument
 
     const transformOptions = unknown.reduce<Record<string, unknown>>((result, key) => {
         const [name, value = true] = key.split('=')
