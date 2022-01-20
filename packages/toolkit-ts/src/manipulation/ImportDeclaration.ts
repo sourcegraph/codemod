@@ -1,6 +1,6 @@
 import { ImportDeclaration, ImportDeclarationStructure, OptionalKind, SourceFile } from 'ts-morph'
 
-import { checkIfFileHasIdentifier } from './SourceFile'
+import { hasIdentifier } from './SourceFile'
 
 export function getImportDeclarationByModuleSpecifier(
     sourceFile: SourceFile,
@@ -19,39 +19,44 @@ export interface AddImportIfIdentifierIsUsedOptions {
 }
 
 /**
- * Adds missing declarations to the source file if literals from the provided import structure are used in the code.
- * TODO: use type information instead of literal names to understand what needs to be changed.
+ * Adds missing import declarations to the `SourceFile` if provided literals are used in the code.
  */
 export function addOrUpdateImportIfIdentifierIsUsed(options: AddImportIfIdentifierIsUsedOptions): void {
     const { sourceFile, importStructure } = options
-    const { namedImports, defaultImport, moduleSpecifier } = importStructure
+    const { namedImports = [], defaultImport, moduleSpecifier } = importStructure
 
-    const usedNamedImports = namedImports?.filter(namedImport => {
-        return checkIfFileHasIdentifier(sourceFile, namedImport)
+    // Filer unused `namedImports` from the provided list.
+    const usedNamedImports = namedImports.filter(namedImport => {
+        return hasIdentifier(sourceFile, namedImport)
     })
 
-    const usedDefaultImport =
-        defaultImport && checkIfFileHasIdentifier(sourceFile, defaultImport) ? defaultImport : undefined
+    // Filter unused `defaultImport`.
+    const usedDefaultImport = defaultImport && hasIdentifier(sourceFile, defaultImport) ? defaultImport : undefined
+
+    // If we have nothing to add to the `ImportDeclaration` after filtering, stop there.
+    if (usedNamedImports.length === 0 && usedDefaultImport === undefined) {
+        return
+    }
 
     const importDeclaration = getImportDeclarationByModuleSpecifier(sourceFile, moduleSpecifier)
 
     if (importDeclaration) {
-        if (usedNamedImports) {
-            for (const namedImport of usedNamedImports) {
-                const isAddedAlready = importDeclaration.getNamedImports().some(existingImport => {
-                    return existingImport.getName() === namedImport
-                })
+        // If there is an `importDeclaration` for the target`moduleSpecifier`, update it instead of creating a new one.
+        for (const namedImportToAdd of usedNamedImports) {
+            const isAlreadyAdded = importDeclaration.getNamedImports().some(existingImport => {
+                return existingImport.getName() === namedImportToAdd
+            })
 
-                if (!isAddedAlready) {
-                    importDeclaration.addNamedImport(namedImport)
-                }
+            if (!isAlreadyAdded) {
+                importDeclaration.addNamedImport(namedImportToAdd)
             }
         }
 
         if (usedDefaultImport && importDeclaration.getDefaultImport()?.getText() !== usedDefaultImport) {
             importDeclaration.setDefaultImport(usedDefaultImport)
         }
-    } else if ((usedNamedImports && usedNamedImports.length > 0) || usedDefaultImport) {
+    } else {
+        // Otherwise, create a new `ImportDeclaration` with used identifiers.
         sourceFile.addImportDeclaration({
             namedImports: usedNamedImports,
             defaultImport: usedDefaultImport,

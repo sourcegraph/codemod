@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+  },
+  "include": ["src", "./.eslintrc.js"],
+  "references": [{ "path": "../eslint-plugin/tsconfig.build.json" }],
+}

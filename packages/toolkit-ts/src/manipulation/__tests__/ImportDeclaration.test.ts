@@ -1,10 +1,9 @@
 import { SyntaxKind } from 'ts-morph'
 
-import { createSourceFile } from '@sourcegraph/codemod-common'
+import { createSourceFile } from '../../testing'
+import { addOrUpdateImportIfIdentifierIsUsed, AddImportIfIdentifierIsUsedOptions } from '../ImportDeclaration'
 
-import { addOrUpdateImportIfIdentifierIsUsed } from '../ImportDeclaration'
-
-const classNamesImportStructure = {
+const classNamesImportStructure: AddImportIfIdentifierIsUsedOptions['importStructure'] = {
     defaultImport: 'classNames',
     moduleSpecifier: 'classnames',
 }

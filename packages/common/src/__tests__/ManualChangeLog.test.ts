@@ -1,11 +1,14 @@
+import { Project } from 'ts-morph'
+
 import { createManualChangeList } from '../ManualChangeList'
-import { createSourceFile } from '../testing'
 
 describe('createManualChangeList', () => {
     it('collects manual change logs', () => {
         const manualChangeList = createManualChangeList()
 
-        const { sourceFile } = createSourceFile('const x = 1')
+        const project = new Project({ useInMemoryFileSystem: true, skipLoadingLibFiles: true })
+        const sourceFile = project.createSourceFile('test.tsx', 'const x = 1')
+
         const manualChangeLog = {
             node: sourceFile.getFirstChildOrThrow(),
             message: 'Hello there!',

@@ -1,0 +1,152 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`globalCssToCssModule transforms correctly 1`] = `
+"
+/* Woah! */
+.kek {
+    color: red;
+
+    /* nah */
+    &--wow {
+        color: blue;
+    }
+}
+
+/* Let's see how you handle global top-level classes! */
+:global(.theme-light) .kek {
+    color: red;
+}
+
+/* .repo-header { */
+.repo-header {
+    flex: none;
+    padding: 0;
+    align-items: stretch;
+    border-color: var(--border-color);
+    border-style: solid;
+
+    /* &--alert { */
+    &--alert {
+        border-width: 1px 0;
+    }
+
+    /* .navbar-nav { */
+    :global(.navbar-nav) {
+        white-space: nowrap;
+
+        :global(.nav-item) {
+            display: flex;
+            align-items: stretch;
+
+            /* .nav-link { */
+            :global(.nav-link) {
+                user-select: none;
+            }
+        }
+    }
+
+    :global(.copy-link-action) {
+        opacity: 0;
+    }
+
+    &:hover,
+    &:focus-within {
+        :global(.copy-link-action) {
+            opacity: 1;
+        }
+    }
+}
+
+.logo {
+    display: flex;
+}
+
+/* &__action-list-item { */
+.action-list-item {
+    /* Have a small gap between buttons so they are visually distinct when pressed */
+    /* stylelint-disable-next-line declaration-property-unit-whitelist */
+    margin-left: 1px;
+
+    /* &:hover { */
+    &:hover {
+        /* background: var(--color-bg-1); */
+        background: var(--color-bg-1);
+
+        /* .theme-light & { */
+        :global(.theme-light) & {
+            background: inherit;
+        }
+    }
+}
+
+/* &__file-action { */
+.file-action {
+    display: block;
+    text-align: left;
+
+    /* span { */
+    span {
+        color: var(--body-color);
+        margin-left: 0.5rem;
+    }
+}
+
+/* &__action { */
+.action {
+    margin: 0.5rem 0.625rem 0.5rem 0;
+    padding: 0.25rem;
+
+    :global(.theme-light) & {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+
+.alert {
+    margin: 0 0.25rem;
+    padding: 0.125rem 0.25rem;
+    cursor: default;
+    user-select: none;
+}
+
+/* &__icon-chevron { */
+.icon-chevron {
+    opacity: 0.6;
+    margin: auto;
+}
+
+.spacer {
+    flex: 1 1 0;
+}
+
+/* &__kek-pek { */
+.kek-pek {
+    color: red;
+}
+"
+`;
+
+exports[`globalCssToCssModule transforms correctly 2`] = `
+"// @ts-nocheck
+import React from 'react'
+import classNames from 'classnames'
+import styles from './MyComponent.module.scss'
+
+export const MyComponent = () => {
+    const isActive = true
+
+    return (
+        <div className={classNames('d-flex m-1', styles.kek, styles.kekWow)}>
+            <div
+                className={classNames('m-1', true ? styles.kek : false, 'd-flex', {
+                    [styles.kek]: false,
+                    [classNames('d-flex mr-1', styles.kek)]: isActive,
+                })}
+            ></div>
+            It's a component<p className={styles.logo}>wow</p>
+            <div className={classNames('m-2 d-flex m-1', styles.repoHeader)}>Another one!</div>
+        </div>
+    )
+}
+"
+`;

@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "outDir": "./dist",
+  },
+  "include": ["src", "types", "scripts"],
+  "references": [{ "path": "../transforms/tsconfig.build.json" }],
+}

@@ -8,7 +8,15 @@ jobs:
     strategy:
       matrix:
         root:
-          - packages/codemod
+          - packages/cli
+          - packages/common
+          - packages/demo-app
+          - packages/eslint-plugin
+          - packages/toolkit-css
+          - packages/toolkit-packages
+          - packages/toolkit-ts
+          - packages/transforms
+
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node.js

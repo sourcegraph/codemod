@@ -3,6 +3,11 @@ import { Node, JsxExpression, StringLiteral } from 'ts-morph'
 import { setOnJsxTagElement, JsxTagElement } from './JsxTagElement'
 
 export function removeJsxAttribute(jsxTagElement: JsxTagElement, attributeName: string): JsxTagElement {
+    /**
+     * 1. Filter out `JsxAttribute` with the target name.
+     * 2. Convert the rest of attributes to JSON structure.
+     * 3. Use this array to update structure of the `JsxTagElement`.
+     */
     const updatedAttributes = jsxTagElement
         .getAttributes()
         .filter(attribute => {
@@ -42,4 +47,27 @@ export function getJsxAttributeStringValue(jsxTagElement: JsxTagElement, attribu
     }
 
     return undefined
+}
+
+export function isJsxAttributeEmpty(jsxTagElement: JsxTagElement, attributeName: string): boolean {
+    const initializer = getJsxAttributeInitializer(jsxTagElement, attributeName)
+
+    // Return `false` if attribute does not exist.
+    if (typeof initializer === 'undefined') {
+        return false
+    }
+
+    // Check for empty expression: `<div className={} />`
+    if (Node.isJsxExpression(initializer)) {
+        const expression = initializer.getExpression()
+
+        return expression === undefined || expression.getText() === 'undefined'
+    }
+
+    // Check for empty string: `<div className="" />`
+    if (Node.isStringLiteral(initializer)) {
+        return initializer.getLiteralValue() === ''
+    }
+
+    return true
 }
