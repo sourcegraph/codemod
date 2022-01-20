@@ -12,9 +12,3 @@ to make sure that we use it for every button in the UI to ensure consistency.
   "@sourcegraph/sourcegraph/use-button-element": ["error"]
 }
 ```
-
-## Attributes
-
-- [x] ✅ Recommended
-- [ ] 🔧 Fixable
-- [ ] 💭 Requires type information

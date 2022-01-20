@@ -41,76 +41,7 @@ testCodemod('buttonElementToComponent', buttonElementToComponent, [
         `,
     },
     {
-        label: '"classNames" utility removal',
-        initialSource: `
-            import classNames from 'classnames'
-
-            export const Test = (
-                <button className={classNames('btn btn-secondary', className)}>Hey</button>
-            )
-        `,
-        expectedSource: `
-            import { Button } from '@sourcegraph/wildcard'
-
-            export const Test = (
-                <Button className={className} variant="secondary">
-                    Hey
-                </Button>
-            )
-        `,
-    },
-    {
-        label: '"classNames" arguments mutation',
-        initialSource: `
-            import classNames from 'classnames'
-
-            export const Test = (
-                 <button type="submit" className={classNames('btn btn-secondary hello', className)}>Hey</button>
-            )
-        `,
-        expectedSource: `
-            import classNames from 'classnames'
-
-            import { Button } from '@sourcegraph/wildcard'
-
-            export const Test = (
-                <Button type="submit" className={classNames('hello', className)} variant="secondary">
-                    Hey
-                </Button>
-            )
-        `,
-    },
-    {
-        label: '"ConditionalExpression" in "classNames" arguments and element children',
-        initialSource: `
-            import classNames from 'classnames'
-
-            export const Test = (
-                <button className={classNames('btn', isActive ? 'btn-primary' : 'btn-info', className)}>
-                    <small>Big</small> bad <b>button</b>
-                </button>
-            )
-        `,
-        expectedSource: `
-            import classNames from 'classnames'
-
-            import { Button } from '@sourcegraph/wildcard'
-
-            export const Test = (
-                <Button className={classNames(isActive ? 'btn-primary' : 'btn-info', className)}>
-                    <small>Big</small> bad <b>button</b>
-                </Button>
-            )
-        `,
-        expectedManualChangeMessages: [
-            `
-                /test.tsx:4:35 - warning: 'ConditionalExpression' parent is not supported. Please complete the transform manually.
-                >>>    isActive ? 'btn-primary' : 'btn-info'
-            `,
-        ],
-    },
-    {
-        label: '"BinaryExpression" in "classNames" arguments',
+        label: '"classNames" utility is handled',
         initialSource: `
             import classNames from 'classnames'
 
