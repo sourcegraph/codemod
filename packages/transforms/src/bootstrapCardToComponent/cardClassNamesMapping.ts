@@ -10,7 +10,7 @@ export interface ClassNameMapping {
 
 export const cardClassNameMapping: ClassNameMapping[] = [
     {
-        className: 'card-header',
+        className: 'card-body',
         props: [],
     },
 ]

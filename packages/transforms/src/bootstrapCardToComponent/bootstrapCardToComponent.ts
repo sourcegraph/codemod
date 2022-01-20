@@ -95,13 +95,13 @@ export const bootstrapCardToComponent = runTransform<ButtonElementToComponentOpt
                     addAsJsxAttribute(jsxTagElement, tagToConvert)
                 }
 
-                setOnJsxTagElement(jsxTagElement, { name: 'CardHeader' })
+                setOnJsxTagElement(jsxTagElement, { name: 'CardBody' })
             }
 
             addOrUpdateSourcegraphWildcardImportIfNeeded({
                 sourceFile,
                 importStructure: {
-                    namedImports: ['CardHeader'],
+                    namedImports: ['CardBody'],
                 },
             })
 
