@@ -52,7 +52,7 @@
     "@types/debug": "*",
     "@types/marked": "*",
     "@types/prettier": "*",
-    "@types/semver": "^7.3.9",
+    "@types/semver": "7.3.9",
     "marked": "^3.0.7",
     "picocolors": "^1.0.0",
     "prettier": "*",
