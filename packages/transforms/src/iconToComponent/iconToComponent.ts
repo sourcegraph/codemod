@@ -1,4 +1,4 @@
-import { JsxAttributeStructure, JsxSpreadAttributeStructure, Node, printNode, StructureKind, ts } from 'ts-morph'
+import { Node, printNode, ts } from 'ts-morph'
 
 import {
     removeClassNameAndUpdateJsxElement,
@@ -10,6 +10,7 @@ import {
     isJsxTagElement,
     getTagName,
     JsxTagElement,
+    setOnJsxTagElement,
 } from '@sourcegraph/codemod-toolkit-ts'
 
 import { validateCodemodTarget, validateCodemodTargetOrThrow } from './validateCodemodTarget'
@@ -24,19 +25,13 @@ interface IconToComponentOptions {
 export const iconToComponent = runTransform<IconToComponentOptions>(context => {
     const { throwManualChangeError, addManualChangeLog } = context
 
-    const jsxTagElementsToUpdate: {
-        jsxTagElement: JsxTagElement
-        props: {
-            name: string
-            value: ts.Node
-        }[]
-    }[] = []
+    const jsxTagElementsToUpdate = new Set<JsxTagElement>()
 
     return {
         StringLiteral(stringLiteral) {
             const { classNameMappings } = validateCodemodTargetOrThrow.StringLiteral(stringLiteral)
             const jsxAttribute = getParentUntilOrThrow(stringLiteral, Node.isJsxAttribute)
-            // console.log(jsxAttribute)
+
             if (!/classname/i.test(jsxAttribute.getName())) {
                 return
             }
@@ -52,11 +47,6 @@ export const iconToComponent = runTransform<IconToComponentOptions>(context => {
                 })
             }
 
-            const iconProps: {
-                name: string
-                value: ts.Node
-            }[] = []
-
             for (const { className, props } of classNameMappings) {
                 const { isRemoved, manualChangeLog } = removeClassNameAndUpdateJsxElement(stringLiteral, className)
 
@@ -65,62 +55,35 @@ export const iconToComponent = runTransform<IconToComponentOptions>(context => {
                 }
 
                 if (isRemoved) {
-                    iconProps.push(...props)
+                    jsxTagElement.addAttribute({
+                        name: 'svg',
+                        initializer: printNode(
+                            ts.factory.createJsxExpression(
+                                undefined,
+                                ts.factory.createIdentifier(getTagName(jsxTagElement))
+                            )
+                        ),
+                    })
+
+                    for (const { name, value } of props) {
+                        jsxTagElement.addAttribute({
+                            name,
+                            initializer: printNode(value),
+                        })
+                    }
                 }
             }
 
-            jsxTagElementsToUpdate.push({
-                jsxTagElement,
-                props: iconProps,
-            })
+            jsxTagElementsToUpdate.add(jsxTagElement)
         },
         SourceFileExit(sourceFile) {
-            if (jsxTagElementsToUpdate.length === 0) {
+            if (jsxTagElementsToUpdate.size === 0) {
                 return
             }
 
-            for (const { jsxTagElement, props } of jsxTagElementsToUpdate) {
+            for (const jsxTagElement of jsxTagElementsToUpdate) {
                 if (Node.isJsxSelfClosingElement(jsxTagElement)) {
-                    const className = jsxTagElement.getAttribute('className')?.getStructure()
-                    const backup = jsxTagElement
-                        .getAttributes()
-                        .filter(attribute => {
-                            return Node.isJsxSpreadAttribute(attribute) || attribute.getName() !== 'className'
-                        })
-                        .map(attribute => {
-                            return attribute.getStructure()
-                        })
-
-                    jsxTagElement.set({
-                        attributes: backup,
-                    })
-
-                    const beforeDelete = `{${jsxTagElement.print()}}`
-
-                    const iconAttributes: (JsxAttributeStructure | JsxSpreadAttributeStructure)[] = props.map(
-                        property => {
-                            return {
-                                name: property.name,
-                                kind: StructureKind.JsxAttribute,
-                                initializer: printNode(property.value),
-                            }
-                        }
-                    )
-
-                    if (className) {
-                        iconAttributes.push(className)
-                    }
-
-                    iconAttributes.unshift({
-                        name: 'svg',
-                        kind: StructureKind.JsxAttribute,
-                        initializer: beforeDelete,
-                    })
-
-                    jsxTagElement.set({
-                        name: 'Icon',
-                        attributes: iconAttributes,
-                    })
+                    setOnJsxTagElement(jsxTagElement, { name: 'Icon' })
                 }
             }
 

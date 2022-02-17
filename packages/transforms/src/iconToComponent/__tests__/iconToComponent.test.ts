@@ -9,7 +9,7 @@ testCodemod('iconToComponent', iconToComponent, [
         expectedSource: `
             import { Icon } from '@sourcegraph/wildcard'
 
-            export const Test = <Icon svg={<CloseIcon />} className="hello" />
+            export const Test = <Icon className="hello" svg={CloseIcon} />
         `,
     },
     {
@@ -18,7 +18,7 @@ testCodemod('iconToComponent', iconToComponent, [
         expectedSource: `
             import { Icon } from '@sourcegraph/wildcard'
 
-            export const Test = <Icon svg={<ConsoleIcon />} size="md" className="hello" />
+            export const Test = <Icon className="hello" svg={ConsoleIcon} size="md" />
         `,
     },
     {
@@ -31,7 +31,7 @@ testCodemod('iconToComponent', iconToComponent, [
 
             import { Icon } from '@sourcegraph/wildcard'
 
-            export const Test = <Icon svg={<ConsoleIcon />} size="md" className={classNames('hello', styles.consoleIcon)} />
+            export const Test = <Icon className={classNames('hello', styles.consoleIcon)} svg={ConsoleIcon} size="md" />
         `,
     },
     {
@@ -42,7 +42,7 @@ testCodemod('iconToComponent', iconToComponent, [
         expectedSource: `
             import { Icon } from '@sourcegraph/wildcard'
 
-            export const Test = <Icon svg={<ConsoleIcon aria-label="Console icon" />} size="md" className={styles.consoleIcon} />
+            export const Test = <Icon aria-label="Console icon" className={styles.consoleIcon} svg={ConsoleIcon} size="md" />
         `,
     },
 ])
