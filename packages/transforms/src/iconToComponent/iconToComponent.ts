@@ -56,7 +56,7 @@ export const iconToComponent = runTransform<IconToComponentOptions>(context => {
 
                 if (isRemoved) {
                     jsxTagElement.addAttribute({
-                        name: 'svg',
+                        name: 'as',
                         initializer: printNode(
                             ts.factory.createJsxExpression(
                                 undefined,
