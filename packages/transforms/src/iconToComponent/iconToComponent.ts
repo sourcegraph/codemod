@@ -15,14 +15,11 @@ import {
 
 import { validateCodemodTarget, validateCodemodTargetOrThrow } from './validateCodemodTarget'
 
-interface IconToComponentOptions {
-    tagToConvert: string
-}
 
 /**
  * Convert `<SomeIcon class="icon-inline" />` element to the `<Icon svg={<SomeIcon />} />` component.
  */
-export const iconToComponent = runTransform<IconToComponentOptions>(context => {
+export const iconToComponent = runTransform(context => {
     const { throwManualChangeError, addManualChangeLog } = context
 
     const jsxTagElementsToUpdate = new Set<JsxTagElement>()
