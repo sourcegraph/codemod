@@ -15,7 +15,6 @@ import {
 
 import { validateCodemodTarget, validateCodemodTargetOrThrow } from './validateCodemodTarget'
 
-
 /**
  * Convert `<SomeIcon class="icon-inline" />` element to the `<Icon svg={<SomeIcon />} />` component.
  */
