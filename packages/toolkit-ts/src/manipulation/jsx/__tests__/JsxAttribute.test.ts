@@ -3,15 +3,11 @@ import { removeJsxAttribute, getJsxAttributeStringValue, isJsxAttributeEmpty } f
 
 describe('removeJsxAttribute', () => {
     it('removes Jsx attribute', () => {
-        const node = createJsxOpeningElement('const x = <button type="button" disabled={true}>hey</button>')
+        const node = createJsxOpeningElement('const x = <button type="button" disabled={true} {...rest}>hey</button>')
 
         removeJsxAttribute(node, 'type')
 
-        expect(
-            node.getAttributes().map(attribute => {
-                return attribute.getText()
-            })
-        ).toEqual(['disabled={true}'])
+        expect(node.print()).toEqual('<button disabled={true} {...rest}>')
     })
 })
 

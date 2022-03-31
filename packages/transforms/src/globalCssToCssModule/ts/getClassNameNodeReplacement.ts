@@ -1,24 +1,16 @@
 import { ts, NodeParentType, SyntaxKind } from 'ts-morph'
-import {
-    Expression,
-    StringLiteral,
-    CallExpression,
-    JsxExpression,
-    ComputedPropertyName,
-    PropertyAccessExpression,
-} from 'typescript'
 
 import { wrapIntoClassNamesUtility, CLASSNAMES_IDENTIFIER } from '@sourcegraph/codemod-toolkit-packages'
 
 export interface GetClassNameNodeReplacementOptions {
-    parentNode: NodeParentType<StringLiteral>
+    parentNode: NodeParentType<ts.StringLiteral>
     leftOverClassName: string
-    exportNameReferences: PropertyAccessExpression[]
+    exportNameReferences: ts.PropertyAccessExpression[]
 }
 
 function getClassNameNodeReplacementWithoutBraces(
     options: GetClassNameNodeReplacementOptions
-): PropertyAccessExpression | CallExpression | Expression[] {
+): ts.PropertyAccessExpression | ts.CallExpression | ts.Expression[] {
     const { leftOverClassName, exportNameReferences, parentNode } = options
 
     const isInClassnamesCall =
@@ -28,7 +20,7 @@ function getClassNameNodeReplacementWithoutBraces(
     // We need to use `classNames` utility for multiple `exportNames` or for a combination of the `exportName` and `StringLiteral`.
     // className={classNames('d-flex mr-1 kek kek--primary')} -> className={classNames('d-flex mr-1', styles.kek, styles.kekPrimary)}
     if (leftOverClassName || exportNameReferences.length > 1) {
-        const classNamesCallArguments: Expression[] = [...exportNameReferences]
+        const classNamesCallArguments: ts.Expression[] = [...exportNameReferences]
 
         if (leftOverClassName) {
             classNamesCallArguments.unshift(ts.factory.createStringLiteral(leftOverClassName))
@@ -48,7 +40,7 @@ function getClassNameNodeReplacementWithoutBraces(
 
 type GetClassNameNodeReplacementResult =
     | {
-          replacement: PropertyAccessExpression | JsxExpression | ComputedPropertyName | CallExpression
+          replacement: ts.PropertyAccessExpression | ts.JsxExpression | ts.ComputedPropertyName | ts.CallExpression
           isParentTransformed: false
       }
     | {

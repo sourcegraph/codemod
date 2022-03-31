@@ -1,5 +1,4 @@
 import { Node, ts, SourceFile, CallExpression } from 'ts-morph'
-import { Expression } from 'typescript'
 
 import { addOrUpdateImportIfIdentifierIsUsed, isImportedFromModule } from '@sourcegraph/codemod-toolkit-ts'
 
@@ -7,7 +6,7 @@ export const CLASSNAMES_IDENTIFIER = 'classNames'
 export const CLASSNAMES_MODULE_SPECIFIER = CLASSNAMES_IDENTIFIER.toLowerCase()
 
 // Wraps array of arguments into a `classNames` function call.
-export function wrapIntoClassNamesUtility(classNames: Expression[]): ts.CallExpression {
+export function wrapIntoClassNamesUtility(classNames: ts.Expression[]): ts.CallExpression {
     return ts.factory.createCallExpression(ts.factory.createIdentifier(CLASSNAMES_IDENTIFIER), undefined, classNames)
 }
 
