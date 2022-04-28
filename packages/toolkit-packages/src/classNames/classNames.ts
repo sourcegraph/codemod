@@ -5,7 +5,7 @@ import { addOrUpdateImportIfIdentifierIsUsed, isImportedFromModule } from '@sour
 export const CLASSNAMES_IDENTIFIER = 'classNames'
 export const CLASSNAMES_MODULE_SPECIFIER = CLASSNAMES_IDENTIFIER.toLowerCase()
 
-// Wraps array of arguments into a `classNames` function call.
+// Wraps an array of arguments in a `classNames` function call.
 export function wrapIntoClassNamesUtility(classNames: ts.Expression[]): ts.CallExpression {
     return ts.factory.createCallExpression(ts.factory.createIdentifier(CLASSNAMES_IDENTIFIER), undefined, classNames)
 }
