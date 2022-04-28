@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@sourcegraph/codemod-cli",
   "version": "1.0.0",
   "description": "@sourcegraph/codemod-cli",

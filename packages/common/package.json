@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@sourcegraph/codemod-common",
   "version": "1.0.0",
   "description": "@sourcegraph/codemod-common",

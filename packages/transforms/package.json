@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@sourcegraph/codemod-transforms",
   "version": "1.0.0",
   "description": "@sourcegraph/codemod-transforms",
