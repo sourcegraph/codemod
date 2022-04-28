@@ -19,10 +19,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
+
       - name: Install dependencies
         run: yarn --ignore-engines --ignore-scripts
 
@@ -35,6 +37,7 @@ jobs:
         run: src lsif upload -github-token='${{ secrets.GITHUB_TOKEN }}' -no-progress
         env:
           SRC_ENDPOINT: https://sourcegraph.com/
+
       - name: Upload lsif-tsc dump to Dogfood
         working-directory: ${{ matrix.root }}
         run: src lsif upload -github-token='${{ secrets.GITHUB_TOKEN }}' -no-progress || true

@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@sourcegraph/app",
+  "name": "@sourcegraph/demo-app",
   "version": "1.10.1",
   "description": "The Sourcegraph web app",
   "license": "Apache-2.0",

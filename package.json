@@ -11,7 +11,7 @@
   "scripts": {
     "transform": "yarn workspace @sourcegraph/codemod-cli transform",
     "test": "jest",
-    "release": "semantic-release",
+    "release": "yarn build && yarn changeset publish",
     "format": "prettier '**/*.{js?(on),ts?(x),scss,md,yml}' --write --list-different  --ignore-path ./.prettierignore",
     "format:check": "yarn format --write=false",
     "lint": "eslint --ignore-pattern 'demo-app' --cache .",
@@ -49,6 +49,7 @@
     "typescript": "4.5.2"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.22.0",
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
     "@sourcegraph/eslint-config": "^0.27.1",
@@ -67,7 +68,8 @@
     "prettier": "^2.4.1",
     "semantic-release": "^17.4.4",
     "ts-dedent": "^2.2.0",
-    "ts-jest": "^27.1.2"
+    "ts-jest": "^27.1.2",
+    "turbo": "^1.2.5"
   },
   "resolutions": {
     "typescript": "4.5.2"
