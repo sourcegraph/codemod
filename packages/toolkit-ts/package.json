@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@sourcegraph/codemod-toolkit-ts",
   "version": "1.0.0",
   "description": "@sourcegraph/codemod-toolkit-ts",
