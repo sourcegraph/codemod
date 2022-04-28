@@ -1,6 +1,6 @@
 {
   "name": "@sourcegraph/codemod-transforms",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "@sourcegraph/codemod-transforms",
   "license": "Apache-2.0",
   "main": "dist/index.js",
@@ -15,8 +15,8 @@
     "lint": "eslint './src/**/*.ts?(x)'"
   },
   "dependencies": {
-    "@sourcegraph/codemod-toolkit-ts": "1.0.0",
-    "@sourcegraph/codemod-toolkit-packages": "1.0.0",
+    "@sourcegraph/codemod-toolkit-ts": "1.0.1",
+    "@sourcegraph/codemod-toolkit-packages": "1.0.1",
     "@sourcegraph/codemod-common": "1.0.0",
     "@sourcegraph/codemod-cli": "1.0.0"
   }
