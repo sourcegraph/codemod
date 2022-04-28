@@ -1,6 +1,7 @@
 import type { InitialOptionsTsJest } from 'ts-jest'
 
 const config: InitialOptionsTsJest = {
+    passWithNoTests: true,
     preset: 'ts-jest',
     globals: {
         'ts-jest': {
