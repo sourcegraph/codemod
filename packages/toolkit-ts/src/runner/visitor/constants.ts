@@ -1,7 +1,7 @@
 import { SyntaxKind } from 'ts-morph'
 
 export const VisitorCustomKind = {
-    // Called after all other kinds in visitor config are processed.
+    // Called after all other visitor config kinds are processed.
     SourceFileExit: 'SourceFileExit',
 } as const
 
