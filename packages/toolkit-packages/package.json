@@ -1,6 +1,6 @@
 {
   "name": "@sourcegraph/codemod-toolkit-packages",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "@sourcegraph/codemod-toolkit-packages",
   "license": "Apache-2.0",
   "main": "dist/index.js",
@@ -16,6 +16,6 @@
   },
   "dependencies": {
     "@sourcegraph/codemod-common": "1.0.0",
-    "@sourcegraph/codemod-toolkit-ts": "1.0.0"
+    "@sourcegraph/codemod-toolkit-ts": "1.0.1"
   }
 }
