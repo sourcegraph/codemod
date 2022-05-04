@@ -1,0 +1,52 @@
+{
+  "name": "@sourcegraph/stylelint-plugin-sourcegraph",
+  "version": "1.0.0",
+  "description": "Custom stylelint rules for the main Sourcegraph repo",
+  "keywords": [
+    "stylelint",
+    "stylelintplugin",
+    "stylelint-plugin",
+    "sourcegraph",
+    "typescript"
+  ],
+  "files": [
+    "dist",
+    "docs",
+    "index.d.ts",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sourcegraph/codemod.git",
+    "directory": "packages/stylelint-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/sourcegraph/codemod/issues"
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc --build ./tsconfig.build.json",
+    "build:watch": "tsc  --build ./tsconfig.build.json --watch",
+    "build:clean": "tsc  --build --clean ./tsconfig.build.json && rimraf dist ./*.tsbuildinfo",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "format": "prettier --write \"./**/*.{ts,js,json,md}\" --ignore-path ../../.prettierignore",
+    "generate:configs": "ts-node --files --transpile-only scripts/generate-configs.ts",
+    "lint": "eslint . --ext .js,.ts --ignore-path ../../.eslintignore"
+  },
+  "dependencies": {
+    "@manypkg/find-root": "^1.1.0",
+    "ignore": "^5.1.8",
+    "postcss-value-parser": "^4.2.0"
+  },
+  "devDependencies": {
+    "jest-preset-stylelint": "^5.0.3"
+  },
+  "peerDependencies": {
+    "stylelint": "^14.3.0"
+  }
+}

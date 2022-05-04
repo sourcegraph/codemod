@@ -23,5 +23,8 @@
     {
       "path": "./packages/eslint-plugin/tsconfig.build.json",
     },
+    {
+      "path": "./packages/stylelint-plugin/tsconfig.build.json",
+    },
   ],
 }
