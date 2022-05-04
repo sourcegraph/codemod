@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "composite": false,
-    "outDir": "./dist"
+    "outDir": "./dist",
   },
-  "include": ["src", "./jest.setup.ts"]
+  "include": ["src", "./jest.setup.ts"],
 }
