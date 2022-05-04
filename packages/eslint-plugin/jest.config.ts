@@ -4,7 +4,7 @@ import baseConfig from '../../jest.config.base'
 
 const config: InitialOptionsTsJest = {
     ...baseConfig,
-    displayName: 'codemod-eslint-plugin',
+    displayName: 'eslint-plugin',
     rootDir: __dirname,
 }
 
