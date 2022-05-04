@@ -1,6 +1,6 @@
 {
   "name": "@sourcegraph/stylelint-plugin-sourcegraph",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Custom stylelint rules for Sourcegraph",
   "keywords": [
     "stylelint",

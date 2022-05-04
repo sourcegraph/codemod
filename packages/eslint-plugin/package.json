@@ -1,6 +1,6 @@
 {
   "name": "@sourcegraph/eslint-plugin-sourcegraph",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Eslint plugin Sourcegraph",
   "keywords": [
     "eslint",
@@ -39,7 +39,7 @@
     "lint": "eslint . --ext .js,.ts --ignore-path ../../.eslintignore"
   },
   "dependencies": {
-    "@sourcegraph/codemod-transforms": "1.0.1",
+    "@sourcegraph/codemod-transforms": "1.0.2",
     "@typescript-eslint/experimental-utils": "5.4.0",
     "@typescript-eslint/scope-manager": "5.4.0",
     "debug": "^4.3.2",
