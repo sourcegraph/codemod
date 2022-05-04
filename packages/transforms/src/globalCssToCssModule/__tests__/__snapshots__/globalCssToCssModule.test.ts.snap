@@ -59,71 +59,71 @@ exports[`globalCssToCssModule transforms correctly 1`] = `
 }
 
 .logo {
-        display: flex;
-    }
+    display: flex;
+}
 
 /* &__action-list-item {*/
 .action-list-item {
-        /* Have a small gap between buttons so they are visually distinct when pressed*/
-        /* stylelint-disable-next-line declaration-property-unit-whitelist*/
-        margin-left: 1px;
+    /* Have a small gap between buttons so they are visually distinct when pressed*/
+    /* stylelint-disable-next-line declaration-property-unit-whitelist*/
+    margin-left: 1px;
 
-        /* &:hover {*/
-        &:hover {
-            /* background: var(--color-bg-1);*/
-            background: var(--color-bg-1);
+    /* &:hover {*/
+    &:hover {
+        /* background: var(--color-bg-1);*/
+        background: var(--color-bg-1);
 
-            /* .theme-light & {*/
-            :global(.theme-light) & {
-                background: inherit;
-            }
+        /* .theme-light & {*/
+        :global(.theme-light) & {
+            background: inherit;
         }
     }
+}
 
 /* &__file-action {*/
 .file-action {
-        display: block;
-        text-align: left;
+    display: block;
+    text-align: left;
 
-        /* span {*/
-        span {
-            color: var(--body-color);
-            margin-left: 0.5rem;
-        }
+    /* span {*/
+    span {
+        color: var(--body-color);
+        margin-left: 0.5rem;
     }
+}
 
 /* &__action {*/
 .action {
-        margin: 0.5rem 0.625rem 0.5rem 0;
-        padding: 0.25rem;
+    margin: 0.5rem 0.625rem 0.5rem 0;
+    padding: 0.25rem;
 
-        :global(.theme-light) & {
-            margin-top: 0;
-            margin-bottom: 0;
-        }
+    :global(.theme-light) & {
+        margin-top: 0;
+        margin-bottom: 0;
     }
+}
 
 .alert {
-        margin: 0 0.25rem;
-        padding: 0.125rem 0.25rem;
-        cursor: default;
-        user-select: none;
-    }
+    margin: 0 0.25rem;
+    padding: 0.125rem 0.25rem;
+    cursor: default;
+    user-select: none;
+}
 
 /* &__icon-chevron {*/
 .icon-chevron {
-        opacity: 0.6;
-        margin: auto;
-    }
+    opacity: 0.6;
+    margin: auto;
+}
 
 .spacer {
-        flex: 1 1 0;
-    }
+    flex: 1 1 0;
+}
 
 /* &__kek-pek {*/
 .kek-pek {
-            color: red;
-        }
+    color: red;
+}
 "
 `;
 
