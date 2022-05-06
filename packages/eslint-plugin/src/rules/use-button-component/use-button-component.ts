@@ -3,7 +3,8 @@ import { ts, StringLiteral, JsxOpeningElement } from 'ts-morph'
 
 import { ButtonElementToComponent } from '@sourcegraph/codemod-transforms'
 
-import { createRule, getNodeWrapper } from '../../utils'
+import { createRule } from '../../utils'
+import { getNodeWrapper } from '../../utils/getWrappedNode'
 
 export const messages = {
     bannedClassnameMessage: 'Use the Wildcard component `<Button />` instead of the `{{name}}` class.',
