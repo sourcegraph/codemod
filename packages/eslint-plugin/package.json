@@ -1,6 +1,6 @@
 {
   "name": "@sourcegraph/eslint-plugin-sourcegraph",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Eslint plugin Sourcegraph",
   "keywords": [
     "eslint",
