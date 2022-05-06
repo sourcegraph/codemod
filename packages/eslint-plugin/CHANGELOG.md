@@ -1,5 +1,11 @@
 # @sourcegraph/eslint-plugin-sourcegraph
 
+## 1.0.5
+
+### Patch Changes
+
+- [#121](https://github.com/sourcegraph/codemod/pull/121) [`1c99d2a`](https://github.com/sourcegraph/codemod/commit/1c99d2abd199df7c26cc567861a87f96e00ab9c7) Thanks [@valerybugakov](https://github.com/valerybugakov)! - Removed `ts-morph` dependency
+
 ## 1.0.4
 
 ### Patch Changes
