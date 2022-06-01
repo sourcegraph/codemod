@@ -40,7 +40,7 @@
     "postcss-nested": "^5.0.6",
     "postcss-scss": "^4.0.0",
     "postcss-selector-parser": "^6.0.6",
-    "prettier-eslint": "^13.0.0",
+    "prettier-eslint": "^15.0.1",
     "signale": "^1.4.0",
     "stylelint": "^14.3.0",
     "ts-morph": "14.0.0",
