@@ -51,8 +51,8 @@
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.4",
     "@changesets/cli": "^2.22.0",
-    "@commitlint/cli": "^16.3.0",
-    "@commitlint/config-conventional": "^16.2.4",
+    "@commitlint/cli": "^17.0.2",
+    "@commitlint/config-conventional": "^17.0.2",
     "@sourcegraph/eslint-config": "^0.29.0",
     "@sourcegraph/prettierrc": "^3.0.3",
     "@sourcegraph/stylelint-config": "^1.4.0",
