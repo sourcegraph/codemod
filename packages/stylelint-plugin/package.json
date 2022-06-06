@@ -44,7 +44,7 @@
     "postcss-value-parser": "^4.2.0"
   },
   "devDependencies": {
-    "jest-preset-stylelint": "^5.0.3"
+    "jest-preset-stylelint": "^5.0.4"
   },
   "peerDependencies": {
     "stylelint": "^14.3.0"
