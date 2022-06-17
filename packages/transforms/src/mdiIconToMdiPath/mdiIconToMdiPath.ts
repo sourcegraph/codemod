@@ -1,81 +1,77 @@
-import { Node, printNode, ts } from 'ts-morph'
+import { Node } from 'ts-morph'
 
-import {
-    removeClassNameAndUpdateJsxElement,
-    addOrUpdateSourcegraphWildcardImportIfNeeded,
-} from '@sourcegraph/codemod-toolkit-packages'
+import { addOrUpdateSourcegraphWildcardImportIfNeeded } from '@sourcegraph/codemod-toolkit-packages'
 import {
     runTransform,
-    getParentUntilOrThrow,
-    isJsxTagElement,
-    getTagName,
     JsxTagElement,
     setOnJsxTagElement,
+    getParentUntilOrThrow,
+    isJsxTagElement,
 } from '@sourcegraph/codemod-toolkit-ts'
-
-import { validateCodemodTargetOrThrow } from './validateCodemodTarget'
 
 /**
  * Convert `<Icon as={MdiIcon} />` element to `<Icon svgPath={mdiIconPath} />` component.
  */
 export const mdiIconToMdiPath = runTransform(context => {
-    const { throwManualChangeError, addManualChangeLog } = context
-
     const jsxTagElementsToUpdate = new Set<JsxTagElement>()
+    const mdiIconPathsToImport = new Set<string>()
 
     return {
-        StringLiteral(stringLiteral) {
-            const { classNameMappings } = validateCodemodTargetOrThrow.StringLiteral(stringLiteral)
-            const jsxAttribute = getParentUntilOrThrow(stringLiteral, Node.isJsxAttribute)
-
+        JsxAttribute(jsxAttribute) {
             const jsxTagElement = getParentUntilOrThrow(jsxAttribute, isJsxTagElement)
-
-            for (const { className, props } of classNameMappings) {
-                const { isRemoved, manualChangeLog } = removeClassNameAndUpdateJsxElement(stringLiteral, className)
-
-                if (manualChangeLog) {
-                    addManualChangeLog(manualChangeLog)
-                }
-
-                if (isRemoved) {
-                    jsxTagElement.addAttribute({
-                        name: 'as',
-                        initializer: printNode(
-                            ts.factory.createJsxExpression(
-                                undefined,
-                                ts.factory.createIdentifier(getTagName(jsxTagElement))
-                            )
-                        ),
-                    })
-
-                    for (const { name, value } of props) {
-                        jsxTagElement.addAttribute({
-                            name,
-                            initializer: printNode(value),
-                        })
-                    }
-                }
-            }
-
-            jsxTagElementsToUpdate.add(jsxTagElement)
-        },
-        SourceFileExit(sourceFile) {
-            if (jsxTagElementsToUpdate.size === 0) {
+            if (jsxTagElement.getTagNameNode().getText() !== 'Icon') {
+                // Not Icon component, lets exit
                 return
             }
 
-            for (const jsxTagElement of jsxTagElementsToUpdate) {
-                if (Node.isJsxSelfClosingElement(jsxTagElement)) {
-                    setOnJsxTagElement(jsxTagElement, { name: 'Icon' })
-                }
+            const structure = jsxAttribute.getStructure()
+            if (structure.name !== 'as' || !structure.initializer) {
+                // Not the 'as' prop or empty, so we exit
+                return
             }
 
-            addOrUpdateSourcegraphWildcardImportIfNeeded({
-                sourceFile,
-                importStructure: {
-                    namedImports: ['Icon'],
-                },
+            // Updates `{CloseIcon}` to `mdiClose`
+            const updatedValue = `mdi${structure.initializer.replace('{', '').replace('}', '').replace('Icon', '')}`
+
+            // Add `svgPath={...}` with updated value
+            jsxTagElement.addAttribute({
+                name: 'svgPath',
+                initializer: `{${updatedValue}}`,
             })
+
+            // Remove `as={...}` with old value
+            jsxAttribute.remove()
+
+            // Store this element so we can import it once finished with this file.
+            jsxTagElementsToUpdate.add(jsxTagElement)
+
+            // Store this import so we can import it once finished with this file.
+            mdiIconPathsToImport.add(updatedValue)
+        },
+        SourceFileExit(sourceFile) {
+            if (jsxTagElementsToUpdate.size > 0) {
+                // Update <Icon to <IconV2
+                for (const jsxTagElement of jsxTagElementsToUpdate) {
+                    if (Node.isJsxSelfClosingElement(jsxTagElement)) {
+                        setOnJsxTagElement(jsxTagElement, { name: 'IconV2' })
+                    }
+                }
+                // Add <IconV2 import
+                addOrUpdateSourcegraphWildcardImportIfNeeded({
+                    sourceFile,
+                    importStructure: {
+                        namedImports: ['IconV2'],
+                    },
+                })
+            }
+
+            if (mdiIconPathsToImport.size > 0) {
+                // Add mdiIcon import
+                sourceFile.addImportDeclaration({
+                    namedImports: [...mdiIconPathsToImport],
+                    moduleSpecifier: '@mdi/js',
+                })
+            }
 
             sourceFile.fixUnusedIdentifiers()
         },
