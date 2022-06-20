@@ -1,10 +1,5 @@
-import { Node } from 'ts-morph'
-
-import { addOrUpdateSourcegraphWildcardImportIfNeeded } from '@sourcegraph/codemod-toolkit-packages'
 import {
     runTransform,
-    JsxTagElement,
-    setOnJsxTagElement,
     getParentUntilOrThrow,
     isJsxTagElement,
     getImportDeclarationByModuleSpecifier,
@@ -16,7 +11,6 @@ import {
 export const mdiIconToMdiPath = runTransform(context => {
     const { addManualChangeLog } = context
 
-    const jsxTagElementsToUpdate = new Set<JsxTagElement>()
     const mdiIconPathsToImport = new Set<string>()
 
     const isMdiReactToken = (token: string): boolean => {
@@ -57,9 +51,7 @@ export const mdiIconToMdiPath = runTransform(context => {
             }
 
             if (!isMdiReactToken(token.replace('{', '').replace('}', ''))) {
-                // its a custom token, we only want to update to IconV2
-                // So just store this element so we can update it once finished with this file.
-                jsxTagElementsToUpdate.add(jsxTagElement)
+                // its a custom icon, we don't need to do anything
                 return
             }
 
@@ -76,27 +68,8 @@ export const mdiIconToMdiPath = runTransform(context => {
 
             // Remove `as={...}` with old value
             jsxAttribute.remove()
-
-            // Store this element so we can update it once finished with this file.
-            jsxTagElementsToUpdate.add(jsxTagElement)
         },
         SourceFileExit(sourceFile) {
-            if (jsxTagElementsToUpdate.size > 0) {
-                // Update <Icon to <IconV2
-                for (const jsxTagElement of jsxTagElementsToUpdate) {
-                    if (Node.isJsxSelfClosingElement(jsxTagElement)) {
-                        setOnJsxTagElement(jsxTagElement, { name: 'IconV2' })
-                    }
-                }
-                // Add <IconV2 import
-                addOrUpdateSourcegraphWildcardImportIfNeeded({
-                    sourceFile,
-                    importStructure: {
-                        namedImports: ['IconV2'],
-                    },
-                })
-            }
-
             if (mdiIconPathsToImport.size > 0) {
                 // Add mdiIcon import
                 sourceFile.addImportDeclaration({

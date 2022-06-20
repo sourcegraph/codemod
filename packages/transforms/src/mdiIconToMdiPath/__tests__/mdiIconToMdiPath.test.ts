@@ -14,9 +14,9 @@ testCodemod('mdiIconToMdiPath', mdiIconToMdiPath, [
         expectedSource: `
             import { mdiClose } from '@mdi/js'
 
-            import { IconV2 } from '@sourcegraph/wildcard'
+            import { Icon } from '@sourcegraph/wildcard'
 
-            export const Test = <IconV2 className="hello" svgPath={mdiClose} />
+            export const Test = <Icon className="hello" svgPath={mdiClose} />
         `,
     },
     {
@@ -28,11 +28,11 @@ testCodemod('mdiIconToMdiPath', mdiIconToMdiPath, [
 
             export const Test = <Icon as={CustomIcon} className="hello" />`,
         expectedSource: `
-            import { IconV2 } from '@sourcegraph/wildcard'
+            import { Icon } from '@sourcegraph/wildcard'
 
             import CustomIcon from '../CustomIcon'
 
-            export const Test = <IconV2 as={CustomIcon} className="hello" />
+            export const Test = <Icon as={CustomIcon} className="hello" />
         `,
     },
     {
@@ -50,9 +50,9 @@ testCodemod('mdiIconToMdiPath', mdiIconToMdiPath, [
             import CloseIcon from 'mdi-react/CloseIcon'
             import OpenIcon from 'mdi-react/OpenIcon'
 
-            import { Icon, IconV2 } from '@sourcegraph/wildcard'
+            import { Icon } from '@sourcegraph/wildcard'
 
-            export const Test = <IconV2 className="hello" svgPath={mdiClose} />
+            export const Test = <Icon className="hello" svgPath={mdiClose} />
             export const Test2 = <Icon as={isOpen ? CloseIcon : OpenIcon} className="hello" />
         `,
         expectedManualChangeMessages: [
