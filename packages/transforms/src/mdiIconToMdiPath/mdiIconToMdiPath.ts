@@ -9,7 +9,7 @@ import {
  * Convert `<Icon as={MdiIcon} />` element to `<Icon svgPath={mdiIconPath} />` component.
  */
 export const mdiIconToMdiPath = runTransform(context => {
-    const { addManualChangeLog } = context
+    const { throwManualChangeError } = context
 
     const mdiIconPathsToImport = new Set<string>()
 
@@ -33,12 +33,11 @@ export const mdiIconToMdiPath = runTransform(context => {
             }
 
             if (structure.initializer.includes(' ')) {
-                addManualChangeLog({
+                // complex expression, so we exit
+                throwManualChangeError({
                     node: jsxAttribute,
                     message: 'Updating an expression is not supported. Please complete the transform manually',
                 })
-                // complex expression, so we exit
-                return
             }
 
             // like `{CloseIcon}`
