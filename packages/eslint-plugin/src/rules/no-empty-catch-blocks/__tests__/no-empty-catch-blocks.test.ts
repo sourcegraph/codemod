@@ -37,7 +37,7 @@ ruleTester.run('no-empty-catch-blocks', noEmptyCatchBlocks, {
     ],
     invalid: [
         {
-            code: `try {} catch {}`,
+            code: 'try {} catch {}',
             errors: [{ messageId: 'noEmptyCatchBlocks' }],
         },
     ],
