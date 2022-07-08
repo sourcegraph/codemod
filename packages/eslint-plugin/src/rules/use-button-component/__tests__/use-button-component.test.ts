@@ -1,4 +1,4 @@
-import { RuleTester, getFixturesRootDir, addFilename } from '../../../testing/RuleTester'
+import { RuleTester, getFixturesRootDir, addReactFilename } from '../../../testing/RuleTester'
 import { useButtonComponent } from '../use-button-component'
 
 const ruleTester = new RuleTester({
@@ -10,7 +10,7 @@ const ruleTester = new RuleTester({
 })
 
 ruleTester.run('use-button-component', useButtonComponent, {
-    valid: addFilename('react.tsx', [
+    valid: addReactFilename([
         {
             code: '<Button variant="primary" className="d-flex" />',
         },
@@ -21,7 +21,7 @@ ruleTester.run('use-button-component', useButtonComponent, {
             code: '<div><div className="d-flex btn-another" /></div>',
         },
     ]),
-    invalid: addFilename('react.tsx', [
+    invalid: addReactFilename([
         {
             code: '<button />',
             errors: [
