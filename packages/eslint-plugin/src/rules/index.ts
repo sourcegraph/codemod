@@ -5,5 +5,5 @@ import { noEmptyCatchBlocks } from './no-empty-catch-blocks'
 // eslint-disable-next-line import/no-default-export
 export default {
     'check-help-links': checkHelpLinks,
-    'no-empty-catch-blocks': noEmptyCatchBlocks
+    'no-empty-catch-blocks': noEmptyCatchBlocks,
 }

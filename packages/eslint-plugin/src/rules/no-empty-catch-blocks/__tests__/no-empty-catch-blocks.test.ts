@@ -1,5 +1,5 @@
-import { getFixturesRootDir, RuleTester } from "../../../testing/RuleTester"
-import { noEmptyCatchBlocks } from "../no-empty-catch-blocks"
+import { getFixturesRootDir, RuleTester } from '../../../testing/RuleTester'
+import { noEmptyCatchBlocks } from '../no-empty-catch-blocks'
 
 const ruleTester = new RuleTester({
     parserOptions: {
@@ -38,7 +38,7 @@ ruleTester.run('no-empty-catch-blocks', noEmptyCatchBlocks, {
     invalid: [
         {
             code: `try {} catch {}`,
-            errors: [{ messageId: 'noEmptyCatchBlocks' }]
+            errors: [{ messageId: 'noEmptyCatchBlocks' }],
         },
     ],
 })
