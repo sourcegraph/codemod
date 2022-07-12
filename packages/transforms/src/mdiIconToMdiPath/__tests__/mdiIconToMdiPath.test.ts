@@ -62,4 +62,58 @@ testCodemod('mdiIconToMdiPath', mdiIconToMdiPath, [
             `,
         ],
     },
+    {
+        label: 'handles direct usage of mdi icons',
+        initialSource: `
+            import CloseIcon from 'mdi-react/CloseIcon'
+
+            export const Test = <CloseIcon className="hello" />`,
+        expectedSource: `
+            import { mdiClose } from '@mdi/js'
+
+            import { Icon } from '@sourcegraph/wildcard'
+
+            export const Test = <Icon className="hello" svgPath={mdiClose} inline={false} aria-hidden={true} />
+        `,
+        expectedManualChangeMessages: [
+            `
+            /test.tsx:3:20 - warning: <MdiIcon /> component did not have accessibility attributes and has been hidden from screen readers automatically. Please review manually
+            >>>     <Icon className="hello" svgPath={mdiClose} inline={false} aria-hidden={true} />
+            `,
+        ],
+    },
+    {
+        label: 'handles direct usage of mdi icons with existing aria attributes',
+        initialSource: `
+            import CloseIcon from 'mdi-react/CloseIcon'
+
+            export const Test = <CloseIcon className="hello" aria-label="Close" />`,
+        expectedSource: `
+            import { mdiClose } from '@mdi/js'
+
+            import { Icon } from '@sourcegraph/wildcard'
+
+            export const Test = <Icon className="hello" aria-label="Close" svgPath={mdiClose} inline={false} />
+        `,
+    },
+    {
+        label: 'handles direct usage of mdi icons with the size prop',
+        initialSource: `
+            import CloseIcon from 'mdi-react/CloseIcon'
+
+            export const Test = <CloseIcon className="hello" aria-label="Close" size="2rem" />
+            export const Test2 = <CloseIcon className="hello" aria-label="Close" size={16} />`,
+        expectedSource: `
+            import { mdiClose } from '@mdi/js'
+
+            import { Icon } from '@sourcegraph/wildcard'
+
+            export const Test = (
+                <Icon className="hello" aria-label="Close" svgPath={mdiClose} inline={false} height="2rem" width="2rem" />
+            )
+            export const Test2 = (
+                <Icon className="hello" aria-label="Close" svgPath={mdiClose} inline={false} height={16} width={16} />
+            )
+        `,
+    },
 ])
