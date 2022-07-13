@@ -17,6 +17,6 @@ If neither of these are set, then the rule will silently succeed.
 
 ```jsonc
 {
-  "@sourcegraph/check-help-links": "error"
+  "@sourcegraph/sourcegraph/check-help-links": "error"
 }
 ```
