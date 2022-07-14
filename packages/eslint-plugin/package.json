@@ -42,7 +42,7 @@
     "@sourcegraph/codemod-transforms": "1.0.2",
     "@typescript-eslint/experimental-utils": "5.4.0",
     "@typescript-eslint/scope-manager": "5.4.0",
-    "debug": "^4.3.2",
+    "debug": "^4.3.4",
     "ignore": "^5.1.8",
     "regexpp": "^3.2.0",
     "semver": "^7.3.5",
