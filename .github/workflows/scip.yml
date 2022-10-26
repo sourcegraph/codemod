@@ -14,12 +14,10 @@ jobs:
       - run: yarn --ignore-engines --ignore-scripts
       - run: scip-typescript index --yarn-workspaces
       - name: Upload SCIP to Cloud
-        working-directory: ${{ matrix.root }}
         run: src lsif upload -github-token='${{ secrets.GITHUB_TOKEN }}' -no-progress
         env:
           SRC_ENDPOINT: https://sourcegraph.com/
       - name: Upload SCIP to Dogfood
-        working-directory: ${{ matrix.root }}
         run: src lsif upload -github-token='${{ secrets.GITHUB_TOKEN }}' -no-progress || true
         env:
           SRC_ENDPOINT: https://k8s.sgdev.org/
