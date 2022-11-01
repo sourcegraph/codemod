@@ -49,8 +49,8 @@
     "tsutils": "^3.21.0"
   },
   "devDependencies": {
-    "@types/debug": "*",
-    "@types/marked": "*",
+    "@types/debug": "4.1.7",
+    "@types/marked": "4.0.1",
     "@types/prettier": "*",
     "@types/semver": "7.3.9",
     "marked": "^3.0.7",
