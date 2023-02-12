@@ -9,6 +9,7 @@ interface ProcessNodesWithClassNameOptions {
     nodesWithClassName: (Identifier | StringLiteral)[]
     exportNameMap: Record<string, string>
     usageStats: Record<string, boolean>
+    classname: 'classnames' | 'clsx'
 }
 
 /**
@@ -41,7 +42,7 @@ interface ProcessNodesWithClassNameOptions {
  * @returns areAllNodesProcessed: boolean
  */
 export function processNodesWithClassName(options: ProcessNodesWithClassNameOptions): boolean {
-    const { nodesWithClassName, exportNameMap, usageStats } = options
+    const { nodesWithClassName, exportNameMap, usageStats, classname } = options
 
     for (const nodeWithClassName of nodesWithClassName) {
         const classNameStringValue =
@@ -68,6 +69,7 @@ export function processNodesWithClassName(options: ProcessNodesWithClassNameOpti
             parentNode: nodeWithClassName.getParent(),
             leftOverClassName: leftOverClassnames.join(' '),
             exportNameReferences,
+            classname
         })
 
         if (result.isParentTransformed) {
