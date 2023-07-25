@@ -50,10 +50,10 @@
   },
   "devDependencies": {
     "@types/debug": "4.1.7",
-    "@types/marked": "4.3.1",
+    "@types/marked": "5.0.1",
     "@types/prettier": "*",
     "@types/semver": "7.3.9",
-    "marked": "^4.3.0",
+    "marked": "^5.1.2",
     "picocolors": "^1.0.0",
     "prettier": "*",
     "typescript": "*"
