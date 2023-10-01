@@ -60,7 +60,7 @@
     "@types/css-modules-loader-core": "1.1.1",
     "@types/eslint": "7.28.2",
     "@types/jest": "27.5.2",
-    "@types/node": "18.17.14",
+    "@types/node": "18.18.1",
     "@types/signale": "1.4.5",
     "@types/stylelint": "14.0.0",
     "eslint": "^7.32.0",
