@@ -1503,10 +1503,10 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/css-modules-loader-core@1.1.3":
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/@types/css-modules-loader-core/-/css-modules-loader-core-1.1.3.tgz#ade0c38c50bc846b99230b47647b31e6271b524f"
-  integrity sha512-lHfmGivmA8fvDWcsb8ohwvFjI3GNkhtG+Zli6hwZ4PQH5yxvKREV/IRTVR9j2a0PZp7VIu1hXWIqdgPRLmy1nw==
+"@types/css-modules-loader-core@1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@types/css-modules-loader-core/-/css-modules-loader-core-1.1.4.tgz#57e4f3b228ed8142e4875b863fba292b48b759bd"
+  integrity sha512-gmcx1j17A1mgDMjYxQNMw1YvvZSF0YwawECsswa3eQoASxsNCb6cCiI8XilodktXK/4UiyWB+2wyaC2+SVeNNg==
   dependencies:
     postcss "7.x.x"
 
