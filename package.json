@@ -38,7 +38,7 @@
     "lodash": "^4.17.21",
     "postcss": "^8.3.6",
     "postcss-nested": "^5.0.6",
-    "postcss-scss": "^4.0.0",
+    "postcss-scss": "^4.0.9",
     "postcss-selector-parser": "^6.0.6",
     "prettier-eslint": "^13.0.0",
     "signale": "^1.4.0",
