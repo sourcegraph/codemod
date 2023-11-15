@@ -12,6 +12,7 @@ export interface CodemodContext<T extends TransformOptions = TransformOptions> {
     shouldWriteFiles?: boolean
     /** If `true` format Typescript source files with `prettier-eslint`. */
     shouldFormat?: boolean
+    classname: 'classnames' | 'clsx'
 }
 
 export interface CodemodResultFile {

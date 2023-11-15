@@ -17,7 +17,8 @@ const program = new Command()
 interface CodemodCliOptions extends TransformOptions {
     write: boolean
     format: boolean
-    transform: string
+    transform: string,
+    classname: 'classnames' | 'clsx'
 }
 
 const PROJECT_ROOT = path.resolve(__dirname, '../../../')
@@ -26,6 +27,7 @@ program
     // TODO: make it `true` by default after switching to fast bulk format.
     .option('-f, --format [format]', 'Format Typescript source files with ESLint', false)
     .option('-w, --write [write]', 'Persist codemod changes to the filesystem', false)
+    .option('-c, --classname <classname>', 'Select className wrapper', 'classnames')
     .option('-t, --transform <transform>', 'Absolute or relative to project root path to a transform module')
     .argument('<fileGlob>', 'Absolute or relative to project root file glob to change files based on')
     .allowUnknownOption(true)
@@ -40,7 +42,8 @@ program
     )
     .action(async (commandArgument: string, options: CodemodCliOptions) => {
         const { fileGlob, transformOptions } = parseOptions(commandArgument)
-        const { write: shouldWriteFiles, format: shouldFormat, transform } = options
+        const { write: shouldWriteFiles, format: shouldFormat, transform, classname: rawClassname } = options
+        const classname = ['classnames', 'clsx'].includes(rawClassname) ? rawClassname : 'classnames';
 
         const projectGlob = path.isAbsolute(fileGlob) ? fileGlob : path.join(PROJECT_ROOT, fileGlob)
         const transformPath = path.isAbsolute(transform) ? transform : path.join(PROJECT_ROOT, transform)
@@ -61,6 +64,7 @@ program
             shouldWriteFiles,
             shouldFormat,
             transformOptions,
+            classname
         }
 
         const results = await (codemod as Codemod)(codemodContext)

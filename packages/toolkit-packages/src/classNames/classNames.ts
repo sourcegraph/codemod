@@ -25,3 +25,40 @@ export function addClassNamesUtilImportIfNeeded(sourceFile: SourceFile): void {
 export function isClassNamesCallExpression(node?: Node): node is CallExpression {
     return Node.isCallExpression(node) && isImportedFromModule(node.getExpression(), CLASSNAMES_MODULE_SPECIFIER)
 }
+
+export const CLSX_IDENTIFIER = 'clsx'
+
+// Wraps an array of arguments in a `clsx` function call.
+export function wrapIntoClsxUtility(classNames: ts.Expression[]): ts.CallExpression {
+    return ts.factory.createCallExpression(ts.factory.createIdentifier(CLSX_IDENTIFIER), undefined, classNames)
+}
+
+// Adds `clsx` import to the `sourceFile` if `classNames` util is used and import doesn't exist.
+export function addClsxUtilImportIfNeeded(sourceFile: SourceFile): void {
+    addOrUpdateImportIfIdentifierIsUsed({
+        sourceFile,
+        importStructure: {
+            defaultImport: CLSX_IDENTIFIER,
+            moduleSpecifier: CLSX_IDENTIFIER,
+        },
+    })
+}
+
+interface Utility {
+    wrapper: (classNames: ts.Expression[]) => ts.CallExpression,
+    importer: (sourceFile: SourceFile) => void,
+    identifier: string
+}
+
+export const utilities: Record<'clsx' | 'classnames', Utility> = {
+    clsx: {
+        wrapper: wrapIntoClsxUtility,
+        importer: addClsxUtilImportIfNeeded,
+        identifier: CLSX_IDENTIFIER
+    },
+    classnames: {
+        wrapper: wrapIntoClassNamesUtility,
+        importer: addClassNamesUtilImportIfNeeded,
+        identifier: CLASSNAMES_IDENTIFIER
+    }
+}
