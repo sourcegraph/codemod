@@ -15,6 +15,6 @@
   "devDependencies": {
     "@sourcegraph/eslint-plugin-sourcegraph": "1.0.5",
     "@types/react": "18.2.37",
-    "react": "^17.0.2"
+    "react": "^18.3.1"
   }
 }
