@@ -45,14 +45,14 @@
     "debug": "^4.3.2",
     "ignore": "^5.1.8",
     "regexpp": "^3.2.0",
-    "semver": "^7.3.5",
+    "semver": "^7.6.3",
     "tsutils": "^3.21.0"
   },
   "devDependencies": {
     "@types/debug": "4.1.7",
     "@types/marked": "5.0.2",
     "@types/prettier": "*",
-    "@types/semver": "7.3.9",
+    "@types/semver": "7.5.8",
     "marked": "^5.1.2",
     "picocolors": "^1.0.0",
     "prettier": "*",
