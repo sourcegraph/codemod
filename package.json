@@ -70,7 +70,7 @@
     "semantic-release": "^17.4.4",
     "ts-dedent": "^2.2.0",
     "ts-jest": "^27.1.2",
-    "turbo": "^1.2.5"
+    "turbo": "^2.0.12"
   },
   "resolutions": {
     "typescript": "4.5.2"
