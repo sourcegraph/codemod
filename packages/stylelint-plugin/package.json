@@ -39,7 +39,7 @@
     "lint": "eslint . --ext .js,.ts --ignore-path ../../.eslintignore"
   },
   "dependencies": {
-    "@manypkg/find-root": "^1.1.0",
+    "@manypkg/find-root": "^2.2.3",
     "ignore": "^5.1.8",
     "postcss-value-parser": "^4.2.0"
   },
