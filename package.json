@@ -64,7 +64,7 @@
     "@types/signale": "1.4.7",
     "@types/stylelint": "14.0.0",
     "eslint": "^7.32.0",
-    "husky": "^7.0.1",
+    "husky": "^9.1.6",
     "jest": "^27.5.1",
     "prettier": "^2.4.1",
     "semantic-release": "^17.4.4",
