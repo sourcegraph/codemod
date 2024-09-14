@@ -36,7 +36,7 @@
     "commander": "^8.1.0",
     "css-modules-loader-core": "^1.1.0",
     "lodash": "^4.17.21",
-    "postcss": "^8.3.6",
+    "postcss": "^8.4.47",
     "postcss-nested": "^5.0.6",
     "postcss-scss": "^4.0.0",
     "postcss-selector-parser": "^6.0.6",
