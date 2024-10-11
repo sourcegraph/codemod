@@ -47,6 +47,6 @@
     "jest-preset-stylelint": "^6.3.2"
   },
   "peerDependencies": {
-    "stylelint": "^14.3.0"
+    "stylelint": "^16.10.0"
   }
 }
