@@ -41,7 +41,7 @@
   "dependencies": {
     "@sourcegraph/codemod-transforms": "1.0.2",
     "@typescript-eslint/experimental-utils": "5.4.0",
-    "@typescript-eslint/scope-manager": "5.4.0",
+    "@typescript-eslint/scope-manager": "8.11.0",
     "debug": "^4.3.2",
     "ignore": "^5.1.8",
     "regexpp": "^3.2.0",
@@ -59,7 +59,7 @@
     "typescript": "*"
   },
   "peerDependencies": {
-    "@typescript-eslint/parser": "^5.0.0",
+    "@typescript-eslint/parser": "^8.11.0",
     "eslint": "^6.0.0 || ^7.0.0 || ^8.0.0"
   },
   "peerDependenciesMeta": {
