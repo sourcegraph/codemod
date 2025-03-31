@@ -4949,10 +4949,10 @@ jest-pnp-resolver@^1.2.2:
   resolved "https://registry.yarnpkg.com/jest-pnp-resolver/-/jest-pnp-resolver-1.2.2.tgz#b704ac0ae028a89108a4d040b3f919dfddc8e33c"
   integrity sha512-olV41bKSMm8BdnuMsewT4jqlZ8+3TCARAXjZGT9jcoSnrfUnRCqnMoF9XEeoWjbzObpqF9dRhHQj0Xb9QdF6/w==
 
-jest-preset-stylelint@^6.3.2:
-  version "6.3.2"
-  resolved "https://registry.yarnpkg.com/jest-preset-stylelint/-/jest-preset-stylelint-6.3.2.tgz#90dbe3dda56a2ee3562cebb49dd8614d44f3056e"
-  integrity sha512-OnodJG8lMAzvhx5WjcGdne6TnGSWASlcUySd3sY+4E3Adgv4LcxBaNT6E15u5WTPpDsElaJqYNveANf2htR/Ng==
+jest-preset-stylelint@^7.3.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/jest-preset-stylelint/-/jest-preset-stylelint-7.3.0.tgz#7e8919e47389b1ffca7222d30fb1a1a586fc3839"
+  integrity sha512-9vRSwXXaCbYSd9kONcGIwV7csFc54UOINBeWAGcWbEuz+uILCfAdYBlDBGRlRdphsbRLCWu6Hs9LgLRo8VwTzA==
 
 jest-regex-util@^27.5.1:
   version "27.5.1"
