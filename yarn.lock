@@ -1396,10 +1396,10 @@
   resolved "https://registry.yarnpkg.com/@sourcegraph/prettierrc/-/prettierrc-3.0.3.tgz#51bfa9b2588fe35121593fa877143e6373028289"
   integrity sha512-FQ1/Ued4I02R0JkrHHofDN163juVxUnPALzfxPZrDZUHv+c3jHjfZhmTHEz+Wd+g3b7MFk0fkj36nZSnvPyU8A==
 
-"@sourcegraph/stylelint-config@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@sourcegraph/stylelint-config/-/stylelint-config-1.4.0.tgz#0db57f153626951b5b349eb055d0ea6bf9a60c1f"
-  integrity sha512-VYL0SRcS/49ttoYsS5pIX2ifVJIzLBWhHj8SvVcT/AF87AnFtuNJ5bAyEJFDL0k4xV5lyWG6R36hXF4xMGThTA==
+"@sourcegraph/stylelint-config@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@sourcegraph/stylelint-config/-/stylelint-config-1.4.1.tgz#d78f62b818803b2a8572132f46bd45633a928b51"
+  integrity sha512-n4ZMH3S4PdX6axovPeetszdADrOUQPy5jevSPJTKtZ+S6C7FWb5b4FgMHmklbn0/X/yVdaf61YheY9VhZlhLYQ==
   dependencies:
     stylelint-config-prettier "^9.0.3"
     stylelint-config-standard-scss "^3.0.0"
