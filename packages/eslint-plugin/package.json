@@ -54,7 +54,7 @@
     "@types/prettier": "*",
     "@types/semver": "7.3.9",
     "marked": "^5.1.2",
-    "picocolors": "^1.0.0",
+    "picocolors": "^1.1.1",
     "prettier": "*",
     "typescript": "*"
   },
