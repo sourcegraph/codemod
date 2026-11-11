@@ -58,6 +58,7 @@ describe('getClassNameNodeReplacement', () => {
                 parentNode,
                 exportNameReferences,
                 leftOverClassName,
+                classname: 'classnames',
                 ...options,
             })
 

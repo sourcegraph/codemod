@@ -1,21 +1,22 @@
 import { ts, NodeParentType, SyntaxKind } from 'ts-morph'
 
-import { wrapIntoClassNamesUtility, CLASSNAMES_IDENTIFIER } from '@sourcegraph/codemod-toolkit-packages'
+import { utilities } from '@sourcegraph/codemod-toolkit-packages'
 
 export interface GetClassNameNodeReplacementOptions {
     parentNode: NodeParentType<ts.StringLiteral>
     leftOverClassName: string
-    exportNameReferences: ts.PropertyAccessExpression[]
+    exportNameReferences: ts.PropertyAccessExpression[],
+    classname: 'classnames' | 'clsx'
 }
 
 function getClassNameNodeReplacementWithoutBraces(
     options: GetClassNameNodeReplacementOptions
 ): ts.PropertyAccessExpression | ts.CallExpression | ts.Expression[] {
-    const { leftOverClassName, exportNameReferences, parentNode } = options
+    const { leftOverClassName, exportNameReferences, parentNode, classname } = options
 
     const isInClassnamesCall =
         ts.isCallExpression(parentNode.compilerNode) &&
-        parentNode.compilerNode.expression.getText() === CLASSNAMES_IDENTIFIER
+        parentNode.compilerNode.expression.getText() === utilities[classname].identifier
 
     // We need to use `classNames` utility for multiple `exportNames` or for a combination of the `exportName` and `StringLiteral`.
     // className={classNames('d-flex mr-1 kek kek--primary')} -> className={classNames('d-flex mr-1', styles.kek, styles.kekPrimary)}
@@ -30,7 +31,7 @@ function getClassNameNodeReplacementWithoutBraces(
             return classNamesCallArguments
         }
 
-        return wrapIntoClassNamesUtility(classNamesCallArguments)
+        return utilities[classname].wrapper(classNamesCallArguments)
     }
 
     // Replace one class with the `exportName`.

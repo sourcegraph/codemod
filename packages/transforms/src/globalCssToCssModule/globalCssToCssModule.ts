@@ -5,7 +5,7 @@ import signale from 'signale'
 import { Codemod } from '@sourcegraph/codemod-cli'
 import { isDefined } from '@sourcegraph/codemod-common'
 import { formatWithStylelint } from '@sourcegraph/codemod-toolkit-css'
-import { addClassNamesUtilImportIfNeeded } from '@sourcegraph/codemod-toolkit-packages'
+import { utilities } from '@sourcegraph/codemod-toolkit-packages'
 import { formatWithPrettierEslint } from '@sourcegraph/codemod-toolkit-ts'
 
 import { getCssModuleExportNameMap } from './postcss/getCssModuleExportNameMap'
@@ -26,7 +26,7 @@ import { transformComponentFile } from './ts/transformComponentFile'
  *
  */
 export const globalCssToCssModule: Codemod = context => {
-    const { project, shouldWriteFiles, shouldFormat } = context
+    const { project, shouldWriteFiles, shouldFormat, classname } = context
     const fs = project.getFileSystem()
 
     /**
@@ -76,8 +76,10 @@ export const globalCssToCssModule: Codemod = context => {
             sourceFilePath: cssFilePath,
         })
 
-        transformComponentFile({ tsSourceFile, exportNameMap, cssModuleFileName })
-        addClassNamesUtilImportIfNeeded(tsSourceFile)
+        transformComponentFile({ tsSourceFile, exportNameMap, cssModuleFileName, classname })
+
+        utilities[classname].importer(tsSourceFile)
+
         tsSourceFile.addImportDeclaration({
             defaultImport: STYLES_IDENTIFIER,
             moduleSpecifier: `./${path.parse(cssModuleFileName).base}`,
